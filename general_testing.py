@@ -333,109 +333,92 @@ cytoscape_graph = cyto.Cytoscape(
 app.layout = html.Div([
     html.Div(cytoscape_graph, style={'position': 'fixed', 'zIndex': '1', 'width': '99vw', 'height': '99vh'}),
     html.Div(
-        dbc.Row([
-            dbc.Col(
-                html.Div(children=[
-                    dbc.Button(
-                        'Expand Settings',
-                        id='settings_button',
-                        className="btn shadow-none",
-                        style={'width': '10vw'}
-                    ), 
-                    dbc.Collapse(children=[
-                        dbc.Button(
-                            'Graph Sliders',
-                            id='graph_sliders_button',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        ), 
-                        dbc.Button(
-                            'Node Filtering',
-                            id='node_filtering_button',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        ), 
-                        dbc.Button(
-                            'Graph Spread',
-                            id='graph_spread_button',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        ), 
-                        dbc.Button(
-                            'Color Editing',
-                            id='color_editing_button',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        ), 
-                        dbc.Button(
-                            'Node Data',
-                            id='selected_node_data_button',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        ), 
-                        dbc.Button(
-                            'Table Data',
-                            className="btn shadow-none",
-                            style={'width': '10vw'}
-                        )
-                        ],
-                        id="settings_collapse",
-                        is_open=False
-                    ), 
-                    ], 
-                    style={'display': 'flex', 'justiftyContent': 'center'}
+        html.Div(children=[
+            dbc.Button(
+                'Expand Settings',
+                id='settings_button',
+                className="btn shadow-none",
+                style={'width': '10vw'}
+            ), 
+            dbc.Collapse(children=[
+                dbc.Button(
+                    'Graph Sliders',
+                    id='graph_sliders_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 ), 
-                width=12, 
-                style={'position': 'relative', 'zIndex': '9'}
-            )
-            ],
-            className='g-0',
-            justify='evenly', 
-            style={}
-        ), 
-        id='settings_div',
-        style={'marginLeft': '1vw', 'marginTop': '1vh', 'position': 'relative', 'zIndex': '22'}
-    ),
-    html.Div(
-        dbc.Row([
-            dbc.Col([
-                dbc.Collapse(
-                    graph_sliders,
-                    id="graph_sliders_collapse",
-                    is_open=False
+                dbc.Button(
+                    'Node Filtering',
+                    id='node_filtering_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 ), 
-                dbc.Collapse(
-                    node_filtering,
-                    id="node_filtering_collapse",
-                    is_open=False
+                dbc.Button(
+                    'Graph Spread',
+                    id='graph_spread_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 ), 
-                dbc.Collapse(
-                    graph_spread,
-                    id="graph_spread_collapse",
-                    is_open=False
+                dbc.Button(
+                    'Color Editing',
+                    id='color_editing_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 ), 
-                dbc.Collapse(
-                    color_editing,
-                    id="color_editing_collapse",
-                    is_open=False
+                dbc.Button(
+                    'Node Data',
+                    id='selected_node_data_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 ), 
-                dbc.Collapse(
-                    # filter_graph_content_2,
-                    id="selected_node_data_collapse",
-                    is_open=False
-                ), 
-                dbc.Collapse(
-                    # filter_graph_content_2,
-                    id="table_collapse",
-                    is_open=False
+                dbc.Button(
+                    'Table Data',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
                 )
-                ], 
-                width=12, 
-                style={'position': 'relative', 'zIndex': '9'}
-            )
-            ]
+                ],
+                id="settings_collapse",
+                is_open=False
+            ), 
+            ], 
+            style={'display': 'flex', 'justiftyContent': 'center'}
+        ),
+        id='settings_div',
+        style={'marginLeft': '1vw', 'marginTop': '1vh', 'width': 'fit-content', 'position': 'relative', 'zIndex': '22'}
+    ),
+    html.Div(children=[
+        dbc.Collapse(
+            graph_sliders,
+            id="graph_sliders_collapse",
+            is_open=False
         ), 
-        style={'marginLeft': '1vw', 'marginTop': '1vh', 'width': '20vw', 'position': 'relative', 'zIndex': '22'}
+        dbc.Collapse(
+            node_filtering,
+            id="node_filtering_collapse",
+            is_open=False
+        ), 
+        dbc.Collapse(
+            graph_spread,
+            id="graph_spread_collapse",
+            is_open=False
+        ), 
+        dbc.Collapse(
+            color_editing,
+            id="color_editing_collapse",
+            is_open=False
+        ), 
+        dbc.Collapse(
+            # filter_graph_content_2,
+            id="selected_node_data_collapse",
+            is_open=False
+        ), 
+        dbc.Collapse(
+            # filter_graph_content_2,
+            id="table_collapse",
+            is_open=False
+        )
+        ],
+        style={'marginLeft': '1vw', 'marginTop': '1vh', 'display': 'flex', 'flex-direction': 'column', 'width': '25vw', 'position': 'relative', 'zIndex': '22'}
     )
 ])
 
