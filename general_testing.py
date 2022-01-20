@@ -1,5 +1,6 @@
 from pickletools import StackObject
 from tkinter.ttk import Style
+from click import style
 import numpy as np
 import pandas as pd
 import networkx as nx
@@ -27,6 +28,48 @@ from generate_graph import Generate_Graph
 graph = Generate_Graph()
 
 app = dash.Dash(external_stylesheets=[dbc.themes.SLATE])
+
+class UI_Tracker:
+    def __init__(self):
+        self.set_initial_state()
+
+    def set_initial_state(self):
+        self.card_stack_tracking = []
+        self.dropdown_cards = []
+
+        self.settings_button_color = None
+        self.content_button_color = None
+
+        self.settings_button_toggle = False
+        self.settings_button_clicks = 0
+        self.settings_button_style = {'width': '10vw'}
+
+        self.graph_sliders_button_toggle = False
+        self.graph_sliders_button_clicks = 0
+        self.graph_sliders_button_style = {'width': '10vw'}
+
+        self.node_filtering_button_toggle = False
+        self.node_filtering_button_clicks = 0
+        self.node_filtering_button_style = {'width': '10vw'}
+
+        self.graph_spread_button_toggle = False
+        self.graph_spread_button_clicks = 0
+        self.graph_spread_button_style = {'width': '10vw'}
+
+        self.color_editing_button_toggle = False
+        self.color_editing_button_clicks = 0
+        self.color_editing_button_style = {'width': '10vw'}
+
+        self.node_data_button_toggle = False
+        self.node_data_button_clicks = 0
+        self.node_data_button_style = {'width': '10vw'}
+
+        self.table_data_button_toggle = False
+        self.table_data_button_clicks = 0
+        self.table_data_button_style = {'width': '10vw'}
+
+
+ui_tracker = UI_Tracker()
 
 graph_sliders = dbc.Card(
     dbc.CardBody(
@@ -288,6 +331,36 @@ color_editing = dbc.Card(
     className="mt-3",
 )
 
+node_data = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                html.Div(
+                    children='Select Node(s)',
+                    id='node_data'
+                ), 
+                style={'min-height': '50', 'max-height': '500'}     
+            )
+        ]
+    ),
+    className="mt-3",
+)
+
+table_data = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                html.Div(
+                    children=None,
+                    id='table_data'
+                ), 
+                style={} # Include overflow in table
+            )
+        ]
+    ),
+    className="mt-3",
+)
+
 default_stylesheet = [
     {
         'selector': 'node',
@@ -330,142 +403,240 @@ cytoscape_graph = cyto.Cytoscape(
     boxSelectionEnabled=True
     )
 
-app.layout = html.Div([
-    html.Div(cytoscape_graph, style={'position': 'fixed', 'zIndex': '1', 'width': '99vw', 'height': '99vh'}),
-    html.Div(
+def server_layout():
+    ui_tracker.set_initial_state()
+
+    app_layout = html.Div([
+        html.Div(cytoscape_graph, style={'position': 'fixed', 'zIndex': '1', 'width': '99vw', 'height': '99vh'}),
+        html.Div(
+            html.Div(children=[
+                dbc.Button(
+                    'Expand Settings',
+                    id='settings_button',
+                    className="btn shadow-none",
+                    style={'width': '10vw'}
+                ), 
+                dbc.Collapse(children=[
+                    dbc.Button(
+                        'Graph Sliders',
+                        id='graph_sliders_button',
+                        className="btn shadow-none",
+                        style=ui_tracker.graph_sliders_button_style
+                    ), 
+                    dbc.Button(
+                        'Node Filtering',
+                        id='node_filtering_button',
+                        className="btn shadow-none",
+                        style=ui_tracker.node_filtering_button_style
+                    ), 
+                    dbc.Button(
+                        'Graph Spread',
+                        id='graph_spread_button',
+                        className="btn shadow-none",
+                        style={'width': '10vw'}
+                    ), 
+                    dbc.Button(
+                        'Color Editing',
+                        id='color_editing_button',
+                        className="btn shadow-none",
+                        style={'width': '10vw'}
+                    ), 
+                    dbc.Button(
+                        'Node Data',
+                        id='node_data_button',
+                        className="btn shadow-none",
+                        style={'width': '10vw'}
+                    ), 
+                    dbc.Button(
+                        'Table Data',
+                        id='table_data_button',
+                        className="btn shadow-none",
+                        style={'width': '10vw'}
+                    )
+                    ],
+                    id="settings_collapse",
+                    is_open=False
+                ), 
+                ], 
+                style={'display': 'flex', 'justiftyContent': 'center'}
+            ),
+            id='settings_div',
+            style={'marginLeft': '1vw', 'marginTop': '1vh', 'width': 'fit-content', 'position': 'relative', 'zIndex': '22'}
+        ),
         html.Div(children=[
-            dbc.Button(
-                'Expand Settings',
-                id='settings_button',
-                className="btn shadow-none",
-                style={'width': '10vw'}
-            ), 
-            dbc.Collapse(children=[
-                dbc.Button(
-                    'Graph Sliders',
-                    id='graph_sliders_button',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                ), 
-                dbc.Button(
-                    'Node Filtering',
-                    id='node_filtering_button',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                ), 
-                dbc.Button(
-                    'Graph Spread',
-                    id='graph_spread_button',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                ), 
-                dbc.Button(
-                    'Color Editing',
-                    id='color_editing_button',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                ), 
-                dbc.Button(
-                    'Node Data',
-                    id='selected_node_data_button',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                ), 
-                dbc.Button(
-                    'Table Data',
-                    className="btn shadow-none",
-                    style={'width': '10vw'}
-                )
-                ],
-                id="settings_collapse",
+            dbc.Collapse(
+                graph_sliders,
+                id="graph_sliders_collapse",
                 is_open=False
             ), 
-            ], 
-            style={'display': 'flex', 'justiftyContent': 'center'}
-        ),
-        id='settings_div',
-        style={'marginLeft': '1vw', 'marginTop': '1vh', 'width': 'fit-content', 'position': 'relative', 'zIndex': '22'}
-    ),
-    html.Div(children=[
-        dbc.Collapse(
-            graph_sliders,
-            id="graph_sliders_collapse",
-            is_open=False
-        ), 
-        dbc.Collapse(
-            node_filtering,
-            id="node_filtering_collapse",
-            is_open=False
-        ), 
-        dbc.Collapse(
-            graph_spread,
-            id="graph_spread_collapse",
-            is_open=False
-        ), 
-        dbc.Collapse(
-            color_editing,
-            id="color_editing_collapse",
-            is_open=False
-        ), 
-        dbc.Collapse(
-            # filter_graph_content_2,
-            id="selected_node_data_collapse",
-            is_open=False
-        ), 
-        dbc.Collapse(
-            # filter_graph_content_2,
-            id="table_collapse",
-            is_open=False
+            dbc.Collapse(
+                node_filtering,
+                id="node_filtering_collapse",
+                is_open=False
+            ), 
+            dbc.Collapse(
+                graph_spread,
+                id="graph_spread_collapse",
+                is_open=False
+            ), 
+            dbc.Collapse(
+                color_editing,
+                id="color_editing_collapse",
+                is_open=False
+            ), 
+            dbc.Collapse(
+                node_data,
+                id="node_data_collapse",
+                is_open=False
+            ), 
+            dbc.Collapse(
+                table_data,
+                id="table_data_collapse",
+                is_open=False
+            )
+            ],
+            id='dropdown_card_div',
+            style={'marginLeft': '1vw', 'marginTop': '1vh', 'display': 'flex', 'flex-direction': 'column', 'width': '20vw', 'position': 'relative', 'zIndex': '22'}
         )
-        ],
-        style={'marginLeft': '1vw', 'marginTop': '1vh', 'display': 'flex', 'flex-direction': 'column', 'width': '25vw', 'position': 'relative', 'zIndex': '22'}
-    )
-])
+    ])
+
+    return app_layout
+
+app.layout = server_layout
 
 @app.callback(
     Output("settings_collapse", "is_open"),
-    Input("settings_button", "n_clicks"),
-    Input("settings_collapse", "is_open"),
+    Output("settings_button", "style"),
+    Input("settings_button", "n_clicks")
 )
-def toggle_left(settings_button_clicks, settings_collapse_is_open):
-    if settings_button_clicks:
-        return not settings_collapse_is_open
+def toggle_settings(setting_button_clicks):
+    if setting_button_clicks != None:
+        if setting_button_clicks > ui_tracker.settings_button_clicks:
+            ui_tracker.settings_button_clicks = ui_tracker.settings_button_clicks + 1
+            ui_tracker.settings_button_toggle = not ui_tracker.settings_button_toggle
+
+            if ui_tracker.settings_button_toggle:
+                ui_tracker.settings_button_style['background'] = 'green'
+
+            else:
+                ui_tracker.settings_button_style['background'] = '#3A3F44'
+    
+    return [ui_tracker.settings_button_toggle, ui_tracker.settings_button_style]
 
 @app.callback(
     Output("graph_sliders_collapse", "is_open"),
-    Input("graph_sliders_button", "n_clicks"),
-    Input("graph_sliders_collapse", "is_open"),
+    Output("graph_sliders_button", "style"),
+    Input("graph_sliders_button", "n_clicks")
 )
-def toggle_left(graph_sliders_button_clicks, graph_sliders_collapse_is_open):
-    if graph_sliders_button_clicks:
-        return not graph_sliders_collapse_is_open
+def toggle_left(graph_sliders_button_clicks):
+    if graph_sliders_button_clicks != None:
+        if graph_sliders_button_clicks > ui_tracker.graph_sliders_button_clicks:
+            ui_tracker.graph_sliders_button_clicks = ui_tracker.graph_sliders_button_clicks + 1
+            ui_tracker.graph_sliders_button_toggle = not ui_tracker.graph_sliders_button_toggle
+
+            if ui_tracker.graph_sliders_button_toggle:
+                ui_tracker.graph_sliders_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.graph_sliders_button_style['background'] = '#3A3F44'
+    
+    return [ui_tracker.graph_sliders_button_toggle, ui_tracker.graph_sliders_button_style]
 
 @app.callback(
     Output("node_filtering_collapse", "is_open"),
-    Input("node_filtering_button", "n_clicks"),
-    Input("node_filtering_collapse", "is_open"),
+    Output("node_filtering_button", "style"),
+    Input("node_filtering_button", "n_clicks")
 )
-def toggle_left(node_filtering_button_clicks, node_filtering_collapse_is_open):
-    if node_filtering_button_clicks:
-        return not node_filtering_collapse_is_open
+def toggle_left(node_filtering_button_clicks):
+    if node_filtering_button_clicks != None:
+        if node_filtering_button_clicks > ui_tracker.node_filtering_button_clicks:
+            ui_tracker.node_filtering_button_clicks = ui_tracker.node_filtering_button_clicks + 1
+            ui_tracker.node_filtering_button_toggle = not ui_tracker.node_filtering_button_toggle
+
+            if ui_tracker.node_filtering_button_toggle:
+                ui_tracker.node_filtering_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.node_filtering_button_style['background'] = '#3A3F44'
+
+    return [ui_tracker.node_filtering_button_toggle, ui_tracker.node_filtering_button_style]
 
 @app.callback(
     Output("graph_spread_collapse", "is_open"),
-    Input("graph_spread_button", "n_clicks"),
-    Input("graph_spread_collapse", "is_open"),
+    Output("graph_spread_button", "style"),
+    Input("graph_spread_button", "n_clicks")
 )
-def toggle_left(graph_spread_button_clicks, graph_spread_collapse_is_open):
-    if graph_spread_button_clicks:
-        return not graph_spread_collapse_is_open
+def toggle_left(graph_spread_button_clicks):
+    if graph_spread_button_clicks != None:
+        if graph_spread_button_clicks > ui_tracker.graph_spread_button_clicks:
+            ui_tracker.graph_spread_button_clicks = ui_tracker.graph_spread_button_clicks + 1
+            ui_tracker.graph_spread_button_toggle = not ui_tracker.graph_spread_button_toggle
+
+            if ui_tracker.graph_spread_button_toggle:
+                ui_tracker.graph_spread_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.graph_spread_button_style['background'] = '#3A3F44'
+
+    return [ui_tracker.graph_spread_button_toggle, ui_tracker.graph_spread_button_style]
 
 @app.callback(
     Output("color_editing_collapse", "is_open"),
-    Input("color_editing_button", "n_clicks"),
-    Input("color_editing_collapse", "is_open"),
+    Output("color_editing_button", "style"),
+    Input("color_editing_button", "n_clicks")
 )
-def toggle_left(color_editing_button_clicks, color_editing_collapse_is_open):
-    if color_editing_button_clicks:
-        return not color_editing_collapse_is_open
+def toggle_left(color_editing_button_clicks):
+    if color_editing_button_clicks != None:
+        if color_editing_button_clicks > ui_tracker.color_editing_button_clicks:
+            ui_tracker.color_editing_button_clicks = ui_tracker.color_editing_button_clicks + 1
+            ui_tracker.color_editing_button_toggle = not ui_tracker.color_editing_button_toggle
+
+            if ui_tracker.color_editing_button_toggle:
+                ui_tracker.color_editing_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.color_editing_button_style['background'] = '#3A3F44'
+
+    return [ui_tracker.color_editing_button_toggle, ui_tracker.color_editing_button_style]
+
+@app.callback(
+    Output("node_data_collapse", "is_open"),
+    Output("node_data_button", "style"),
+    Input("node_data_button", "n_clicks")
+)
+def toggle_left(node_data_button_clicks):
+    if node_data_button_clicks != None:
+        if node_data_button_clicks > ui_tracker.node_data_button_clicks:
+            ui_tracker.node_data_button_clicks = ui_tracker.node_data_button_clicks + 1
+            ui_tracker.node_data_button_toggle = not ui_tracker.node_data_button_toggle
+
+            if ui_tracker.node_data_button_toggle:
+                ui_tracker.node_data_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.node_data_button_style['background'] = '#3A3F44'
+
+    return [ui_tracker.node_data_button_toggle, ui_tracker.node_data_button_style]
+
+@app.callback(
+    Output("table_data_collapse", "is_open"),
+    Output("table_data_button", "style"),
+    Input("table_data_button", "n_clicks")
+)
+def toggle_left(table_data_button_clicks):
+    if table_data_button_clicks != None:
+        if table_data_button_clicks > ui_tracker.table_data_button_clicks:
+            ui_tracker.table_data_button_clicks = ui_tracker.table_data_button_clicks + 1
+            ui_tracker.table_data_button_toggle = not ui_tracker.table_data_button_toggle
+
+            if ui_tracker.table_data_button_toggle:
+                ui_tracker.table_data_button_style['background'] = 'orange'
+
+            else:
+                ui_tracker.table_data_button_style['background'] = '#3A3F44'
+
+    return [ui_tracker.table_data_button_toggle, ui_tracker.table_data_button_style]
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)
