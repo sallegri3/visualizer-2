@@ -18,6 +18,8 @@ from colour import Color
 class Generate_Graph:
     def __init__(self, df_list=None, target_cui_target_name_dict=None) -> None:
 
+        self._initialize_graph_state()
+
         self.target_spread = 1
         self.sn_spread = 0.1
         self.specified_targets=None
@@ -40,17 +42,25 @@ class Generate_Graph:
 
         self._format_data(df_list, target_cui_target_name_dict)
         self._generate_color_mapping()
-        self._adjust_data()
+        self._generate_table()
 
         self.starting_nx_graph = self._generate_nx_graph()
         self.starting_elements = self.generate_graph_elements()
 
-        self.starting_mean_hetesim_range = self.mean_hetesim_range
+        # self.starting_mean_hetesim_range = self.mean_hetesim_range
         self.starting_min_edge_value = self.min_edge_value
         self.starting_max_edge_value = self.max_edge_value
         self.starting_max_node_count = self.max_node_count
 
         self.random_color = False
+
+    def _initialize_graph_state(self):
+        
+        self.node_hetesim_range_adjusted = False
+        self.edge_hetesim_range_adjusted = False
+        self.max_node_count_adjusted = False
+
+        self.sn_cui_name_dict = {}
 
     def _generate_dummy_graph(self):
 
@@ -152,6 +162,8 @@ class Generate_Graph:
                 sn_mean_hetesim_dict_formatted[sn_adjusted] = np.mean(sn_mean_hetesim_adjusted)
                 sn_type_dict_formatted[sn_adjusted] = sn_type_adjusted
 
+                self.sn_cui_name_dict[row['sn']] = sn_name_adjusted
+
             target_relationship_list_formatted.append(tuple(df.iloc[0]['targets'].keys()))
 
             formatted_df_list.append(sub_df_formatted)
@@ -164,12 +176,29 @@ class Generate_Graph:
 
         self.combined_formatted_df = pd.concat(formatted_df_list)
         self.unique_types = self.combined_formatted_df['type'].unique()
+
+        # Node HeteSim slider value initialization
+        self.node_hetesim_range = [
+            np.round(self.combined_formatted_df['mean_hetesim'].min(), 3), 
+            np.round(self.combined_formatted_df['mean_hetesim'].max(), 3)
+            ]
         
-        max_node_count = 0
+        self.node_hetesim_step_size = np.round((self.node_hetesim_range[1] - self.node_hetesim_range[0]) / 100, 3)
+
+        self.node_hetesim_range_start = self.node_hetesim_range[0] - self.node_hetesim_step_size
+        if self.node_hetesim_range_start < 0:
+            self.node_hetesim_range_start = 0
+
+        self.node_hetesim_range_end = self.node_hetesim_range[1] + self.node_hetesim_step_size
+        if self.node_hetesim_range_end > 1:
+            self.node_hetesim_range_end = 1
+
+        # Edge HeteSim slider value initialization
+        min_edge_value = np.inf
         for df in formatted_df_list:
-            if df.shape[0] > max_node_count:
-                max_node_count = df.shape[0]
-        self.max_node_count = int(max_node_count / 2)
+            if df['hetesim'].min() < min_edge_value:
+                min_edge_value = df['hetesim'].min()
+        self.min_edge_value = min_edge_value
 
         max_edge_value = -np.inf
         for df in formatted_df_list:
@@ -177,24 +206,78 @@ class Generate_Graph:
                 max_edge_value = df['hetesim'].max()
         self.max_edge_value = max_edge_value
 
-        min_edge_value = np.inf
-        for df in formatted_df_list:
-            if df['hetesim'].min() < min_edge_value:
-                min_edge_value = df['hetesim'].min()
-        self.min_edge_value = min_edge_value
+        self.edge_hetesim_range = [
+            np.round(self.min_edge_value, 3), 
+            np.round(self.max_edge_value, 3)
+            ]
+        
+        self.edge_hetesim_step_size = np.round((self.max_edge_value - self.min_edge_value) / 100, 3)
 
-        self.mean_hetesim_range = [self.combined_formatted_df['mean_hetesim'].min(), self.combined_formatted_df['mean_hetesim'].max()]
+        self.edge_hetesim_range_start = self.min_edge_value - self.edge_hetesim_step_size
+        if self.edge_hetesim_range_start < 0:
+            self.edge_hetesim_range_start = 0
+
+        self.edge_hetesim_range_end = self.max_edge_value + self.edge_hetesim_step_size
+        if self.edge_hetesim_range_end > 1:
+            self.edge_hetesim_range_end = 1
+
+        # Max node slider value initialization
+        max_node_count = 0
+        for df in formatted_df_list:
+            if df.shape[0] > max_node_count:
+                max_node_count = df.shape[0]
+        self.max_node_count = int(max_node_count / 2)
 
         self.max_node_size_ref = 10 / self.combined_formatted_df['mean_hetesim'].max()
-        self.mean_hetesim_step_size = np.round((np.round(self.mean_hetesim_range[1], 3) - np.round(self.mean_hetesim_range[0], 3)) / 100, 3)
-        self.edge_hetesim_step_size = np.round((self.max_edge_value - self.min_edge_value) / 100, 3)
+
+        # Specific target filtering initialization
+        self.specific_target_dropdown = None
+
+        self.specific_target_input_options = []
+        for entry in self.target_cui_target_name_dict:
+            self.specific_target_input_options.append({'label': self.target_cui_target_name_dict[entry], 'value': entry})
+
+        # Specific source filtering initialization
+        self.specific_source_dropdown = None
+
+        self.specific_source_input_options = []
+        for entry in self.sn_cui_name_dict:
+            self.specific_source_input_options.append({'label': self.sn_cui_name_dict[entry], 'value': entry})
+
+        self.adjusted_df_list = formatted_df_list.copy()
+
+        # Specific type filtering initialization
+        self.specific_type_dropdown = None
+
+        self.specific_type_input_options = []
+        for entry in self.unique_types:
+            self.specific_type_input_options.append({'label': entry, 'value': entry})
+
+        # Gradient start initialization
+        self.gradient_start = '#000000'
+
+        # Gradient end initialization
+        self.gradient_end = '#000000'
+
+        # SN type color initialization
+        self.selected_types = {}
+        self.selected_type_color = '#000000'
+
+        # Target color initialization
+        self.target_color = '#000000'
+
+        # Randomized color initialization
+        self.randomized_color_button_clicks = None
+
+        self.adjusted_df_list = formatted_df_list.copy()
 
         return formatted_df_list
     
     def _adjust_data(self):
 
         adjusted_df_list = self.formatted_df_list.copy()
-
+        
+        '''
         if self.specified_targets != None:
             adjusted_df_list = self._select_specific_targets(adjusted_df_list, self.specified_targets)
 
@@ -209,14 +292,33 @@ class Generate_Graph:
 
         if (self.min_mean_hetesim != 0) or (self.max_mean_hetesim != 1):
             adjusted_df_list = self._select_max_min_hetesim_range(adjusted_df_list, 'mean_hetesim', self.min_mean_hetesim, self.max_mean_hetesim)
+        '''
 
-        if (self.min_edge_hetesim != 0) or (self.max_edge_hetesim != 1):
-            adjusted_df_list = self._select_max_min_hetesim_range(adjusted_df_list, 'hetesim', self.min_edge_hetesim, self.max_edge_hetesim)
+        if self.max_node_count_adjusted:
+            adjusted_df_list = self._adjust_max_nodes(adjusted_df_list)
+
+        if self.node_hetesim_range_adjusted:
+            adjusted_df_list = self._adjust_node_hetesim_range(adjusted_df_list)
+
+        if self.edge_hetesim_range_adjusted:
+            adjusted_df_list = self._adjust_edge_hetesim_range(adjusted_df_list)
+
+        if (self.specific_target_dropdown != []) and (self.specific_target_dropdown != None):
+            adjusted_df_list = self._adjust_specific_target_dropdown(adjusted_df_list)
+
+        if (self.specific_source_dropdown != []) and (self.specific_source_dropdown != None):
+            adjusted_df_list = self._adjust_specific_source_dropdown(adjusted_df_list)
+
+        if (self.specific_type_dropdown != []) and (self.specific_type_dropdown != None):
+            adjusted_df_list = self._adjust_specific_type_dropdown(adjusted_df_list)           
         
         self.adjusted_df_list = adjusted_df_list
-        self.combined_adjusted_df = pd.concat(adjusted_df_list)
+
+        self._generate_table()
 
     def _generate_nx_graph(self):
+
+        self.combined_adjusted_df = pd.concat(self.adjusted_df_list)
 
         target_edges = []
         for relationship in self.target_relationship_list_formatted:
@@ -326,70 +428,81 @@ class Generate_Graph:
 
             self.type_color_dict['target'] = 'hsl(0, 100%, 60%)'
 
-        if (self.type_pallet_start != None) and (self.type_pallet_end != None) and (self.type_pallet_start != '') and (self.type_pallet_end != ''):
-            starting_color = Color(self.type_pallet_start)
-            color_gradient_list = list(starting_color.range_to(Color(self.type_pallet_end), len(self.unique_types)))
+        if (self.gradient_start != '#000000') and (self.gradient_end != '#000000'):
+            starting_color = Color(self.gradient_start)
+            color_gradient_list = list(starting_color.range_to(Color(self.gradient_end), len(self.unique_types)))
 
             for i, type in enumerate(self.unique_types):
                 self.type_color_dict[type] = color_gradient_list[i]
 
-        if (self.type_color_mapping != None) and (self.type_color_mapping != ''):
-            for type in self.type_color_mapping:
-                self.type_color_dict[type] = self.type_color_mapping[type]
+        if self.selected_type_color != '#000000':
+            for type in self.selected_types:
+                self.type_color_dict[type] = self.selected_type_color
 
-        if (self.target_color_mapping != None) and (self.target_color_mapping != ''):
-            self.type_color_dict['target'] = self.target_color_mapping
+        if self.target_color != '#000000':
+            self.type_color_dict['target'] = self.target_color
 
-    def _select_max_min_hetesim_range(self, df_list, df_column, min_hetesim, max_hetesim):
+    def _adjust_node_hetesim_range(self, df_list):
 
         adjusted_df_list = []
 
         for df in df_list:
-            df = df[df[df_column] >= min_hetesim]
-            df = df[df[df_column] <= max_hetesim]
+            df = df[df['mean_hetesim'] >= self.node_hetesim_range[0]]
+            df = df[df['mean_hetesim'] <= self.node_hetesim_range[1]]
             adjusted_df_list.append(df)
 
         return adjusted_df_list
 
-    def _select_max_nodes(self, df_list, max_node_count):
+    def _adjust_edge_hetesim_range(self, df_list):
 
         adjusted_df_list = []
 
         for df in df_list:
-            unique_max_count_sns = df['sn'].unique()[:max_node_count]
+            df = df[df['hetesim'] >= self.edge_hetesim_range[0]]
+            df = df[df['hetesim'] <= self.edge_hetesim_range[1]]
+            adjusted_df_list.append(df)
+
+        return adjusted_df_list
+
+    def _adjust_max_nodes(self, df_list):
+
+        adjusted_df_list = []
+
+        for df in df_list:
+            unique_max_count_sns = df['sn'].unique()[:self.max_node_count]
             df = df[df['sn'].isin(unique_max_count_sns)]
             adjusted_df_list.append(df)
 
         return adjusted_df_list
 
-    def _select_specific_targets(self, df_list, target_list):
+    def _adjust_specific_target_dropdown(self, df_list):
 
         adjusted_df_list = []
 
         for df in df_list:
-            adjusted_df_list.append(df[df['target'].isin(target_list)])
+            adjusted_df_list.append(df[df['target'].isin(self.specific_target_dropdown)])
 
         return adjusted_df_list
 
-    def _select_specific_types(self, df_list, type_list):
+    def _adjust_specific_source_dropdown(self, df_list):
 
         adjusted_df_list = []
 
         for df in df_list:
-            adjusted_df_list.append(df[df['type'].isin(type_list)])
+            adjusted_df_list.append(df[df['sn_cui'].isin(self.specific_source_dropdown)])
 
         return adjusted_df_list
 
-    def _select_specific_sources(self, df_list, source_list):
+    def _adjust_specific_type_dropdown(self, df_list):
 
         adjusted_df_list = []
 
         for df in df_list:
-            adjusted_df_list.append(df[df['sn_cui'].isin(source_list)])
+            adjusted_df_list.append(df[df['type'].isin(self.specific_type_dropdown)])
 
         return adjusted_df_list
 
-    def generate_table(self):
+    def _generate_table(self):
 
         combined_df_generating = pd.concat(self.adjusted_df_list)
         combined_df_generating = combined_df_generating.round({'hetesim': 3, 'mean_hetesim': 3})
@@ -403,12 +516,11 @@ class Generate_Graph:
             sorted_df_list.append(specific_target_df.sort_values(['hetesim'], ascending=False))
 
         combined_df_local = pd.concat(sorted_df_list)
+        
+        self.table_data = combined_df_local
+        self.data_table_columns = [{"name": i, "id": i} for i in combined_df_local.columns]
+        self.table_data = combined_df_local.to_dict('records')
 
-        return dt.DataTable(
-            id='table',
-            columns=[{"name": i, "id": i} for i in combined_df_local.columns],
-            data=combined_df_local.to_dict('records'), 
-            page_size=50)
 
 '''
 

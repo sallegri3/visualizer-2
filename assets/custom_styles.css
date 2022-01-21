@@ -1,0 +1,36 @@
+::-webkit-scrollbar {
+    background: #32383E;
+    width: 8px;
+    height: 8px;
+  }
+
+::-webkit-scrollbar-thumb {
+    background: #8ecae6;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-corner {
+  background: none;
+}
+
+.rc-slider-track {
+  background-color: #8ecae6;
+}
+
+.rc-slider-dot-active {  
+  border-color: #8ecae6;
+  border: solid 2px #8ecae6;
+}
+
+.rc-slider-handle {
+  background-color: white;
+  border-color: #8ecae6;
+}
+
+.rc-slider-handle:hover {
+  border-color: #8ecae6;
+}
+
+.rc-slider-handle-active:active {
+  border-color: #8ecae6;
+}
