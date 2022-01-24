@@ -21,11 +21,11 @@ import dash_bootstrap_components as dbc
 
 from generate_graph import Generate_Graph
 
-unpickled_df = pd.read_pickle('test_formatted_data')
+# unpickled_df = pd.read_pickle('test_formatted_data')
 
-graph = Generate_Graph([unpickled_df], {'C0002395': 'AD', 'C0020676': 'Hypothyroidism', 'C0025519': 'Metabolism'})
+# graph = Generate_Graph([unpickled_df], {'C0002395': 'AD', 'C0020676': 'Hypothyroidism', 'C0025519': 'Metabolism'})
 
-# graph = Generate_Graph()
+graph = Generate_Graph()
 
 app = dash.Dash(external_stylesheets=[dbc.themes.SLATE])
 
@@ -41,36 +41,41 @@ class UI_Tracker:
         self.settings_button_color_selected = '#00465d'
 
         self.content_button_color = '#3A3F44'
-        self.content_button_color_selected = '#0fa3b1'
+        self.content_button_color_selected = '#00465d'
 
         self.settings_button_toggle = False
         self.settings_button_clicks = 0
-        self.settings_button_style = {'width': '10vw'}
+        self.settings_button_style = {'width': '50%'}
         self.settings_button_text = 'Expand Settings'
 
         self.graph_sliders_button_toggle = False
         self.graph_sliders_button_clicks = 0
-        self.graph_sliders_button_style = {'width': '10vw'}
+        self.graph_sliders_button_style = {'width': '20vw'}
 
         self.node_filtering_button_toggle = False
         self.node_filtering_button_clicks = 0
-        self.node_filtering_button_style = {'width': '10vw'}
+        self.node_filtering_button_style = {'width': '20vw'}
 
         self.graph_spread_button_toggle = False
         self.graph_spread_button_clicks = 0
-        self.graph_spread_button_style = {'width': '10vw'}
+        self.graph_spread_button_style = {'width': '20vw'}
 
         self.color_editing_button_toggle = False
         self.color_editing_button_clicks = 0
-        self.color_editing_button_style = {'width': '10vw'}
+        self.color_editing_button_style = {'width': '20vw'}
 
         self.node_data_button_toggle = False
         self.node_data_button_clicks = 0
-        self.node_data_button_style = {'width': '10vw'}
+        self.node_data_button_style = {'width': '20vw'}
 
         self.table_data_button_toggle = False
         self.table_data_button_clicks = 0
-        self.table_data_button_style = {'width': '10vw'}
+        self.table_data_button_style = {'width': '20vw'}
+
+        self.display_color_gradient_start = '#272B30'
+        self.display_color_gradient_end = '#272B30'
+        self.display_selected_source_type = '#272B30'
+        self.display_target_color = '#272B30'
 
 ui_tracker = UI_Tracker()
 
@@ -127,8 +132,7 @@ graph_sliders = dbc.Card(
                 style={'marginBottom': '6%'} 
             )
         ]
-    ),
-    className="mt-3",
+    )
 )
 
 node_filtering = dbc.Card(
@@ -139,7 +143,7 @@ node_filtering = dbc.Card(
                 dcc.Dropdown(
                     id='specific_target_dropdown', 
                     options=graph.specific_target_input_options,
-                    value=None,
+                    value=[],
                     multi=True)
                 ], 
                 style={'marginBottom': '6%'}
@@ -150,7 +154,7 @@ node_filtering = dbc.Card(
                 dcc.Dropdown(
                     id='specific_source_dropdown', 
                     options=graph.specific_source_input_options,
-                    value=None,
+                    value=[],
                     multi=True)
                 ], 
                 style={'marginBottom': '6%'}
@@ -161,14 +165,13 @@ node_filtering = dbc.Card(
                 dcc.Dropdown(
                     id='specific_type_dropdown', 
                     options=graph.specific_type_input_options,
-                    value=None,
+                    value=[],
                     multi=True)
                 ], 
                 style={'marginBottom': '6%'}
             )          
         ]
-    ),
-    className="mt-3",
+    )
 )
 
 graph_spread = dbc.Card(
@@ -202,8 +205,7 @@ graph_spread = dbc.Card(
                 style={'marginBottom': '6%'}
             ),
         ]
-    ),
-    className="mt-3",
+    )
 )
 
 color_editing = dbc.Card(
@@ -215,14 +217,14 @@ color_editing = dbc.Card(
                 dbc.Input(
                     type="color",
                     id="gradient_start",
-                    value="#000000",
+                    value=graph.gradient_start_initial,
                     style={"width": 50, "height": 25, 'display': 'inline-block', 'marginRight': '1%', 'border': 'none', 'padding': '0'}
                 ),
                 html.Div(',', style={'display': 'inline-block', 'marginRight': '1%', 'marginLeft': '1%'}),
                 dbc.Input(
                     type="color",
                     id="gradient_end",
-                    value="#000000",
+                    value=graph.gradient_end_initial,
                     style={"width": 50, "height": 25, 'display': 'inline-block', 'marginLeft': '1%', 'border': 'none', 'padding': '0'},
                 )               
                 ], 
@@ -233,8 +235,8 @@ color_editing = dbc.Card(
                 html.H6('Selected Source Node Type Color:', style={'marginRight': '5%'}, className="card-text"),
                 dbc.Input(
                     type="color",
-                    id="sn_type_color",
-                    value="#000000",
+                    id="selected_type_color",
+                    value=graph.selected_type_color_initial,
                     style={"width": 50, "height": 25, 'display': 'inline-block', 'border': 'none', 'padding': '0'}
                 )           
                 ], 
@@ -246,7 +248,7 @@ color_editing = dbc.Card(
                 dbc.Input(
                     type="color",
                     id="target_color",
-                    value="#000000",
+                    value=graph.target_color_initial,
                     style={"width": 50, "height": 25, 'display': 'inline-block', 'border': 'none', 'padding': '0'}
                 )           
                 ], 
@@ -265,7 +267,6 @@ color_editing = dbc.Card(
             )
         ]
     ),
-    className="mt-3",
 )
 
 node_data = dbc.Card(
@@ -276,11 +277,10 @@ node_data = dbc.Card(
                     children='Select Node(s)',
                     id='node_data'
                 ), 
-                style={'max-height': '500px', 'overflowY': 'scroll'}
+                style={'max-height': '400px', 'overflowX': 'scroll', 'overflowY': 'scroll'}
             )
         ]
-    ),
-    className="mt-3",
+    )
 )
 
 table_data = dbc.Card(
@@ -299,7 +299,7 @@ table_data = dbc.Card(
                     style_header={
                         'border': '#32383E'
                     },
-                    style_table={'overflowX': 'auto', 'overflowY': 'auto', 'max-height': '500px'},
+                    style_table={'overflowX': 'auto', 'overflowY': 'auto', 'max-height': '400px'},
                     style_data_conditional=[                
                         {
                             "if": {"state": "selected"},
@@ -314,12 +314,10 @@ table_data = dbc.Card(
                         # { 'selector': '.current-page-shadow', 'rule': 'font-size: 16px;'}
                     ],
                     page_size=50
-                ), 
-                style={'max-height': '500px'}
+                )
             )
         ]
-    ),
-    className="mt-3",
+    )
 )
 
 default_stylesheet = [
@@ -366,102 +364,111 @@ cytoscape_graph = cyto.Cytoscape(
 
 def server_layout():
     ui_tracker.set_initial_state()
+    # graph.reset_graph()
+    # graph.random_color_primacy = True
+    # graph._generate_color_mapping()
 
     app_layout = html.Div([
         html.Div(cytoscape_graph, style={'position': 'fixed', 'zIndex': '1', 'width': '99vw', 'height': '99vh'}),
-        html.Div(
+        html.Div(children=[
             html.Div(children=[
                 dbc.Button(children=[
                     'Expand Settings'
                     ],
                     id='settings_button',
                     className="btn shadow-none", 
-                    style={'width': '10vw'}
+                    style={'width': '50%'}
                 ), 
-                dbc.Collapse(children=[
-                    dbc.Button(
-                        'Graph Sliders',
-                        id='graph_sliders_button',
-                        className="btn shadow-none",
-                        style=ui_tracker.graph_sliders_button_style
-                    ), 
-                    dbc.Button(
-                        'Node Filtering',
-                        id='node_filtering_button',
-                        className="btn shadow-none",
-                        style=ui_tracker.node_filtering_button_style
-                    ), 
-                    dbc.Button(
-                        'Graph Spread',
-                        id='graph_spread_button',
-                        className="btn shadow-none",
-                        style={'width': '10vw'}
-                    ), 
-                    dbc.Button(
-                        'Color Editing',
-                        id='color_editing_button',
-                        className="btn shadow-none",
-                        style={'width': '10vw'}
-                    ), 
-                    dbc.Button(
-                        'Node Data',
-                        id='node_data_button',
-                        className="btn shadow-none",
-                        style={'width': '10vw'}
-                    ), 
-                    dbc.Button(
-                        'Table Data',
-                        id='table_data_button',
-                        className="btn shadow-none",
-                        style={'width': '10vw'}
-                    )
+                dbc.Button(children=[
+                    'Reset Graph'
                     ],
-                    id="settings_collapse",
+                    id='reset_button',
+                    className="btn shadow-none", 
+                    style={'width': '50%', 'background': '#800000'}
+                ) 
+                ], 
+                style={'width': '20vw'}
+            ),
+            dbc.Collapse(children=[
+                dbc.Button(
+                    'Graph Sliders',
+                    id='graph_sliders_button',
+                    className="btn shadow-none",
+                    style=ui_tracker.graph_sliders_button_style
+                ), 
+                dbc.Collapse(
+                    graph_sliders,
+                    id="graph_sliders_collapse",
                     is_open=False
                 ), 
-                ], 
-                style={'display': 'flex', 'justiftyContent': 'center'}
-            ),
-            id='settings_div',
-            style={'marginLeft': '1vw', 'marginTop': '1vh', 'width': 'fit-content', 'position': 'relative', 'zIndex': '22'}
-        ),
-        html.Div(children=[
-            dbc.Collapse(
-                graph_sliders,
-                id="graph_sliders_collapse",
-                is_open=False
-            ), 
-            dbc.Collapse(
-                node_filtering,
-                id="node_filtering_collapse",
-                is_open=False
-            ), 
-            dbc.Collapse(
-                graph_spread,
-                id="graph_spread_collapse",
-                is_open=False
-            ), 
-            dbc.Collapse(
-                color_editing,
-                id="color_editing_collapse",
-                is_open=False
-            ), 
-            dbc.Collapse(
-                node_data,
-                id="node_data_collapse",
-                is_open=False
-            ), 
-            dbc.Collapse(
-                table_data,
-                id="table_data_collapse",
-                is_open=False
+                dbc.Button(
+                    'Node Filtering',
+                    id='node_filtering_button',
+                    className="btn shadow-none",
+                    style=ui_tracker.node_filtering_button_style
+                ), 
+                dbc.Collapse(
+                    node_filtering,
+                    id="node_filtering_collapse",
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Graph Spread',
+                    id='graph_spread_button',
+                    className="btn shadow-none",
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    graph_spread,
+                    id="graph_spread_collapse",
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Color Editing',
+                    id='color_editing_button',
+                    className="btn shadow-none",
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    color_editing,
+                    id="color_editing_collapse",
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Node Data',
+                    id='node_data_button',
+                    className="btn shadow-none",
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    node_data,
+                    id="node_data_collapse",
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Table Data',
+                    id='table_data_button',
+                    className="btn shadow-none",
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    table_data,
+                    id="table_data_collapse",
+                    is_open=False
+                )
+                ],
+                id="settings_collapse",
+                is_open=False, 
+                style={'width': '20vw'}
             )
-            ],
-            id='dropdown_card_div',
-            style={'marginLeft': '1vw', 'marginTop': '1vh', 'display': 'flex', 'flex-direction': 'column', 'width': '20vw', 'position': 'relative', 'zIndex': '22'}
+            ], 
+            style={
+                'display': 'flex', 'flex-direction': 'column', 'marginLeft': '1vw', 
+                'marginTop': '1vh', 'width': 'fit-content', 'padding': '0px', 'background': '#32383E', 'border': 'none', 
+                'position': 'relative', 'zIndex': '22'}
         )
     ])
-
+    
     return app_layout
 
 app.layout = server_layout
@@ -614,6 +621,7 @@ def toggle_left(table_data_button_clicks):
     Output(component_id='source_spread_slider', component_property='value'),
     Output(component_id='gradient_start', component_property='value'), 
     Output(component_id='gradient_end', component_property='value'), 
+    Output(component_id='selected_type_color', component_property='value'), 
     Output(component_id='target_color', component_property='value'),
     Output(component_id='data_table', component_property='columns'),
     Output(component_id='data_table', component_property='data'),
@@ -627,9 +635,11 @@ def toggle_left(table_data_button_clicks):
     Input(component_id='source_spread_slider', component_property='value'), 
     Input(component_id='gradient_start', component_property='value'), 
     Input(component_id='gradient_end', component_property='value'), 
-    Input(component_id='sn_type_color', component_property='value'), 
+    Input(component_id='selected_type_color', component_property='value'), 
     Input(component_id='target_color', component_property='value'), 
-    Input(component_id='randomize_colors_button', component_property='n_clicks')
+    Input(component_id='randomize_colors_button', component_property='n_clicks'), 
+    Input(component_id='reset_button', component_property='n_clicks'), 
+    prevent_initial_call=True
 )
 def toggle_left(
     input_node_hetesim_range_slider, 
@@ -642,21 +652,43 @@ def toggle_left(
     input_sn_spread, 
     input_gradient_start, 
     input_gradient_end, 
-    input_sn_type_color,
+    input_selected_type_color,
     input_target_color, 
-    input_randomize_colors_button_clicks):
+    input_randomize_colors_button_clicks, 
+    input_reset_button):
+    
+    if input_reset_button != graph.reset_button_clicks:
+        graph.reset_button_clicks = input_reset_button
+
+        graph.reset_graph()
+
+        return [
+            graph.starting_elements,
+            graph.node_hetesim_range, 
+            graph.edge_hetesim_range, 
+            graph.max_node_count,
+            graph.specific_target_dropdown, 
+            graph.specific_source_dropdown, 
+            graph.specific_type_dropdown, 
+            graph.target_spread, 
+            graph.sn_spread,
+            '#272B30', 
+            '#272B30', 
+            '#272B30',
+            '#272B30', 
+            graph.data_table_columns, 
+            graph.table_data
+            ]
+    
 
     if input_node_hetesim_range_slider != graph.node_hetesim_range:
         graph.node_hetesim_range = input_node_hetesim_range_slider
-        graph.node_hetesim_range_adjusted = True
 
     if input_edge_hetesim_range_slider != graph.edge_hetesim_range:
         graph.edge_hetesim_range = input_edge_hetesim_range_slider
-        graph.edge_hetesim_range_adjusted = True
 
     if input_max_node_slider != graph.max_node_count:
         graph.max_node_count = input_max_node_slider
-        graph.max_node_count_adjusted = True
 
     if input_specific_target_dropdown != graph.specific_target_dropdown:
         graph.specific_target_dropdown = input_specific_target_dropdown
@@ -670,24 +702,45 @@ def toggle_left(
     graph.target_spread = input_target_spread
     graph.sn_spread = input_sn_spread
 
-    if input_gradient_start != graph.gradient_start:
-        graph.gradient_start = input_gradient_start    
+    if (input_gradient_start != graph.gradient_start) and (input_gradient_start != '#272B30'):
+        ui_tracker.display_color_gradient_start = input_gradient_start
 
-    if input_gradient_end != graph.gradient_end:
-        graph.gradient_end = input_gradient_end
+        if input_gradient_end != '#272B30':
+            graph.gradient_start = input_gradient_start
+            graph.gradient_end = input_gradient_end
+            graph.gradient_color_primacy = True
+        
+    if (input_gradient_end != graph.gradient_end) and (input_gradient_end != '#272B30'):
+        ui_tracker.display_color_gradient_end = input_gradient_end
 
-    if input_sn_type_color != graph.selected_type_color:
-        graph.selected_type_color = input_sn_type_color
+        if input_gradient_start != '#272B30':
+            graph.gradient_start = input_gradient_start
+            graph.gradient_end = input_gradient_end
+            graph.gradient_color_primacy = True
 
-    if input_target_color != graph.target_color:
+    if (input_selected_type_color != graph.selected_type_color) and (input_selected_type_color != '#272B30'):
+        graph.selected_type_color = input_selected_type_color
+
+        ui_tracker.display_selected_source_type = input_selected_type_color
+        graph.type_color_primacy = True
+
+    if (input_target_color != graph.target_color) and (input_target_color != '#272B30'):
         graph.target_color = input_target_color
+
+        ui_tracker.display_target_color = input_target_color
+        graph.target_color_primacy = True
 
     if input_randomize_colors_button_clicks != graph.randomized_color_button_clicks:
         graph.randomized_color_button_clicks = input_randomize_colors_button_clicks
-        graph.random_color = True
+
+        ui_tracker.display_color_gradient_start = '#272B30'
+        ui_tracker.display_color_gradient_end = '#272B30'
+        ui_tracker.display_selected_source_type = '#272B30'
+        ui_tracker.display_target_color = '#272B30'
+        
+        graph.random_color_primacy = True
 
     graph._generate_color_mapping()
-    graph.random_color = False
 
     return [
         graph.update_graph_elements(),
@@ -699,11 +752,13 @@ def toggle_left(
         graph.specific_type_dropdown, 
         graph.target_spread, 
         graph.sn_spread,
-        input_gradient_start, 
-        input_gradient_end, 
-        input_target_color, 
+        ui_tracker.display_color_gradient_start, 
+        ui_tracker.display_color_gradient_end, 
+        ui_tracker.display_selected_source_type,
+        ui_tracker.display_target_color, 
         graph.data_table_columns, 
-        graph.table_data]
+        graph.table_data
+        ]
 
 
 @app.callback(
@@ -717,7 +772,7 @@ def displayTapNodeData(input_selected_nodes):
     display_data = []
     selected_set = set()
 
-    for i, node in enumerate(input_selected_nodes):
+    for _, node in enumerate(input_selected_nodes):
         if node['sn_or_tn'] == 'source_node':
             selected_set.add(graph.starting_nx_graph.nodes[node['id']]['type'])
             display_data.append(html.Div( 
@@ -725,7 +780,7 @@ def displayTapNodeData(input_selected_nodes):
                 style={'font-weight': 'bold'}))
 
             edges = {}
-            for j, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
+            for _, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
                 edges[str(graph.target_cui_target_name_dict[connecting_node]) + ' (CUI:' + str(connecting_node) + ')'] = np.round(graph.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3)
 
             edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
@@ -747,7 +802,7 @@ def displayTapNodeData(input_selected_nodes):
                 style={'font-weight': 'bold'}))
 
             edges = {}
-            for j, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
+            for _, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
                 edges[str(graph.starting_nx_graph.nodes[connecting_node]['name']) + ' (CUI:' + str(graph.starting_nx_graph.nodes[connecting_node]['cui']) + ')'] = float(np.round(graph.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3))
             
             edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
@@ -761,6 +816,8 @@ def displayTapNodeData(input_selected_nodes):
 
             display_data.append(html.Pre(json.dumps(data_dump, indent=2)))
 
+    graph.selected_types = selected_set
+
     return display_data
 
 
@@ -768,8 +825,4 @@ if __name__ == "__main__":
     app.run_server(debug=True)
 
 
-# Include button hover .css in assets
-# Style scrollbar using .css
-
-# Fix button activation
-# Expanding menu
+# Fix button css
