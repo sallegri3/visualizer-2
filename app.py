@@ -1,29 +1,305 @@
 import numpy as np
-import pandas as pd
-import networkx as nx
-import itertools
+import json
+
 import dash
 import dash_cytoscape as cyto
 import dash_html_components as html
-import plotly.graph_objects as go
-import networkx as nx
-import pandas as pd
-import time
-from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_table as dt
-import json
-from colour import Color
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
 
 from generate_graph import Generate_Graph
 
-unpickled_df = pd.read_pickle('test_formatted_data')
+# unpickled_df = pd.read_pickle('test_formatted_data')
 
-graph = Generate_Graph([unpickled_df], {'C0002395': 'AD', 'C0020676': 'Hypothyroidism', 'C0025519': 'Metabolism'})
+# graph = Generate_Graph([unpickled_df], {'C0002395': 'AD', 'C0020676': 'Hypothyroidism', 'C0025519': 'Metabolism'})
 
-# graph = Generate_Graph()
+graph = Generate_Graph()
 
-app = dash.Dash(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.SLATE])
+
+class UI_Tracker:
+    def __init__(self):
+        self.set_initial_state()
+
+    def set_initial_state(self):
+        self.card_stack_tracking = []
+        self.dropdown_cards = []
+
+        self.settings_button_toggle = False
+        self.settings_button_class = 'button_disabled'
+        self.settings_button_text = 'Expand Settings'
+
+        self.graph_sliders_button_toggle = False
+        self.graph_sliders_button_class = 'button_disabled'
+
+        self.node_filtering_button_toggle = False
+        self.node_filtering_button_class = 'button_disabled'
+
+        self.graph_spread_button_toggle = False
+        self.graph_spread_button_class = 'button_disabled'
+
+        self.color_editing_button_toggle = False
+        self.color_editing_button_class = 'button_disabled'
+
+        self.node_data_button_toggle = False
+        self.node_data_button_class = 'button_disabled'
+
+        self.table_data_button_toggle = False
+        self.table_data_button_class = 'button_disabled'
+
+        self.display_gradient_start_color = graph.gradient_start_initial
+        self.display_gradient_end_color = graph.gradient_end_initial
+        self.display_selected_type_color = graph.selected_type_color_initial
+        self.display_target_color = graph.target_color_initial
+
+ui_tracker = UI_Tracker()
+
+graph_sliders = dbc.Card(
+    dbc.CardBody(
+        [
+            html.H6('Node HeteSim:', className='card-text', style={'marginBottom': '3%'}),
+            html.Div(
+                dcc.RangeSlider(
+                    id='node_hetesim_range_slider',
+                    min=graph.node_hetesim_range_start,
+                    max=graph.node_hetesim_range_end,
+                    step=graph.node_hetesim_step_size,
+                    value=[
+                        graph.node_hetesim_range[0], 
+                        graph.node_hetesim_range[1]
+                        ],
+                    tooltip={'placement': 'bottom', 'always_visible': True},
+                    vertical=False
+                ),
+                style={'marginBottom': '6%'}
+            ),
+
+            html.H6('Edge HeteSim:', className='card-text', style={'marginBottom': '3%'}),
+
+            html.Div(
+                dcc.RangeSlider(
+                    id='edge_hetesim_range_slider',
+                    min=graph.edge_hetesim_range_start,
+                    max=graph.edge_hetesim_range_end,
+                    step=graph.edge_hetesim_step_size,
+                    value=[
+                        graph.edge_hetesim_range[0],
+                        graph.edge_hetesim_range[1]
+                        ],
+                    tooltip={'placement': 'bottom', 'always_visible': True},
+                    vertical=False
+                ), 
+                style={'marginBottom': '6%'} 
+            ),
+
+            html.H6('Max Node Count:', className='card-text', style={'marginBottom': '3%'}),
+
+            html.Div(
+                dcc.Slider(
+                    id='max_node_slider',
+                    min=1,
+                    max=graph.max_node_count,
+                    step=1,
+                    value=graph.max_node_count,
+                    tooltip={'placement': 'bottom', 'always_visible': True},
+                    vertical=False
+                ), 
+                style={'marginBottom': '6%'} 
+            )
+        ]
+    )
+)
+
+node_filtering = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(children=[
+                html.H6('Select Target Node CUIs:', className='card-text'),
+                dcc.Dropdown(
+                    id='specific_target_dropdown', 
+                    options=graph.specific_target_input_options,
+                    value=[],
+                    multi=True)
+                ], 
+                style={'marginBottom': '6%'}
+            ), 
+
+            html.Div(children=[
+                html.H6('Select Source Node CUIs:', className='card-text'),
+                dcc.Dropdown(
+                    id='specific_source_dropdown', 
+                    options=graph.specific_source_input_options,
+                    value=[],
+                    multi=True)
+                ], 
+                style={'marginBottom': '6%'}
+            ), 
+
+            html.Div(children=[
+                html.H6('Select Source Node Types:', className='card-text'),
+                dcc.Dropdown(
+                    id='specific_type_dropdown', 
+                    options=graph.specific_type_input_options,
+                    value=[],
+                    multi=True)
+                ], 
+                style={'marginBottom': '6%'}
+            )          
+        ]
+    )
+)
+
+graph_spread = dbc.Card(
+    dbc.CardBody(
+        [
+            html.H6('Target Node Spread:', className='card-text', style={'marginBottom': '3%'}),
+            html.Div(
+                dcc.Slider(
+                    id='target_spread_slider',
+                    min=0.1,
+                    max=3,
+                    step=0.1,
+                    value=1,
+                    tooltip={'placement': 'bottom', 'always_visible': True},
+                    vertical=False
+                ),
+                style={'marginBottom': '6%'}
+            ),
+
+            html.H6('Source Node Spread:', className='card-text', style={'marginBottom': '3%'}),
+            html.Div(
+                dcc.Slider(
+                    id='source_spread_slider',
+                    min=0.01,
+                    max=0.3,
+                    step=0.01,
+                    value=0.1,
+                    tooltip={'placement': 'bottom', 'always_visible': True},
+                    vertical=False
+                ),
+                style={'marginBottom': '6%'}
+            ),
+        ]
+    )
+)
+
+color_editing = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(children=[
+                html.H6('Type Gradient:', style={'marginRight': '5%'}, className='card-text'
+                ),
+                dbc.Input(
+                    type='color',
+                    id='gradient_start',
+                    value=graph.gradient_start_initial,
+                    style={'width': 50, 'height': 25, 'display': 'inline-block', 'marginRight': '1%', 'border': 'none', 'padding': '0'}
+                ),
+                html.Div(',', style={'display': 'inline-block', 'marginRight': '1%', 'marginLeft': '1%'}),
+                dbc.Input(
+                    type='color',
+                    id='gradient_end',
+                    value=graph.gradient_end_initial,
+                    style={'width': 50, 'height': 25, 'display': 'inline-block', 'marginLeft': '1%', 'border': 'none', 'padding': '0'},
+                )               
+                ], 
+                style={'display': 'flex', 'justiftyContent': 'center', 'marginBottom': '6%'}
+            ), 
+
+            html.Div(children=[
+                html.H6('Selected Source Node Type Color:', style={'marginRight': '5%'}, className='card-text'),
+                dbc.Input(
+                    type='color',
+                    id='selected_type_color',
+                    value=graph.selected_type_color_initial,
+                    style={'width': 50, 'height': 25, 'display': 'inline-block', 'border': 'none', 'padding': '0'}
+                )           
+                ], 
+                style={'display': 'flex', 'justiftyContent': 'center', 'marginBottom': '6%'}
+            ), 
+
+            html.Div(children=[
+                html.H6('Target Node Color:', style={'marginRight': '5%'}, className='card-text'),
+                dbc.Input(
+                    type='color',
+                    id='target_color',
+                    value=graph.target_color_initial,
+                    style={'width': 50, 'height': 25, 'display': 'inline-block', 'border': 'none', 'padding': '0'}
+                )           
+                ], 
+                style={'display': 'flex', 'justiftyContent': 'center', 'marginBottom': '6%'}
+            ), 
+
+            html.Div(children=[
+                dbc.Button(
+                    'Randomize Colors', 
+                    id='randomize_colors_button', 
+                    className='btn shadow-none'
+                )
+                ],
+                style={'marginBottom': '4%'}, 
+                className='d-grid gap-2 col-6 mx-auto'
+            )
+        ]
+    ),
+)
+
+node_data = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                html.Div(
+                    children='Select Node(s)',
+                    id='node_data'
+                ), 
+                style={'max-height': '400px', 'overflowX': 'scroll', 'overflowY': 'scroll'}
+            )
+        ]
+    )
+)
+
+table_data = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                dt.DataTable(
+                    id='data_table', 
+                    columns=graph.data_table_columns, 
+                    data=graph.table_data, 
+                    style_as_list_view=True,
+                    style_cell={
+                        'backgroundColor': '#32383E', 
+                        'textAlign': 'left'
+                    },
+                    style_header={
+                        'border': '#32383E'
+                    },
+                    style_table={'overflowX': 'auto', 'overflowY': 'auto', 'max-height': '400px'},
+                    style_data_conditional=[                
+                        {
+                            'if': {'state': 'selected'},
+                            'backgroundColor': '#8ecae6',
+                            'border': '#FFFFFF',
+                            'color': '#000000'
+                        }
+                    ],
+                    css=[
+                        { 'selector': '.current-page', 'rule': 'visibility: hidden;'}, 
+                        { 'selector': '.current-page-shadow', 'rule': 'color: #AAAAAA; font-size: 16px;'}, 
+                        { 'selector': '.next-page:hover', 'rule': 'color: #8ecae6;'}, 
+                        { 'selector': '.last-page:hover', 'rule': 'color: #8ecae6;'}, 
+                        { 'selector': '.previous-page:hover', 'rule': 'color: #8ecae6;'}, 
+                        { 'selector': '.first-page:hover', 'rule': 'color: #8ecae6;'}
+                    ],
+                    export_format='csv',
+                    page_size=50
+                )
+            )
+        ]
+    )
+)
 
 default_stylesheet = [
     {
@@ -58,649 +334,418 @@ default_stylesheet = [
         }
     ]
 
-app.layout = html.Div([
-    html.Div(children=[
-        dcc.Tabs(
-            id='tabs_global',
-            children=[
-                dcc.Tab(
-                    label='Graph Data',
-                    children=[
-                        html.Div(children=[
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Node HeteSim:'
-                                    ], 
-                                    style={'width': '30%', 'height': '30px', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.RangeSlider(
-                                        id='hetesim_mean_range_slider',
-                                        min=0,
-                                        max=np.round(graph.mean_hetesim_range[1], 3) + graph.mean_hetesim_step_size,
-                                        step=graph.mean_hetesim_step_size,
-                                        value=[
-                                            (np.round(graph.mean_hetesim_range[0], 3) - graph.mean_hetesim_step_size), 
-                                            (np.round(graph.mean_hetesim_range[1], 3) + graph.mean_hetesim_step_size)
-                                            ],
-                                        tooltip={'placement': 'bottom', 'always_visible': True},
-                                        vertical=False
-                                        )
-                                    ], 
-                                    style={'width': '100%', 'height': '30px'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '30%'}
-                            ), 
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Edge HeteSim:'
-                                    ], style={'width': '30%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.RangeSlider(
-                                        id='hetesim_edge_range_slider',
-                                        min=0,
-                                        max=np.round(graph.max_edge_value, 3) + graph.edge_hetesim_step_size,
-                                        step=graph.edge_hetesim_step_size,
-                                        value=[
-                                            (np.round(graph.min_edge_value, 3) - graph.edge_hetesim_step_size),
-                                            (np.round(graph.max_edge_value, 3) + graph.edge_hetesim_step_size)
-                                            ],
-                                        tooltip={'placement': 'bottom', 'always_visible': True},
-                                        vertical=False
-                                        )
-                                    ], 
-                                    style={'width': '70%', 'height': '10px', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            ),
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Max Nodes:'
-                                    ], style={'width': '30%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.Slider(
-                                        id='node_max_slider',
-                                        min=1,
-                                        max=graph.max_node_count,
-                                        step=1,
-                                        value=graph.max_node_count,
-                                        tooltip={'placement': 'bottom', 'always_visible': True},
-                                        vertical=False
-                                        )
-                                    ], 
-                                    style={'width': '70%', 'height': '10px', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            ),
-
-                            html.Div(style={'border': '1px black solid', 'margin':'5%', 'width': '90%'}),
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Specific TN CUIs:'
-                                    ], 
-                                    style={'width': '35%', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.Input(id='specific_target_input', type='text', placeholder='Separate with commas', value=None)
-                                    ], 
-                                    style={'width': '45%', 'display': 'inline-block'}
-                                ),
-                                html.Div(children=[
-                                    html.Button('Submit', id='specific_target_submit_button', n_clicks=0)
-                                    ], 
-                                    style={'width': '20%', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            ),
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Specific SN CUIs:'
-                                    ], style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.Input(id='specific_source_input', type='text', placeholder='Separate with commas')
-                                    ], style={'width': '45%', 'height': '10px', 'display': 'inline-block'}
-                                ),
-                                html.Div(children=[
-                                    html.Button('Submit', id='specific_source_submit_button', n_clicks=0)
-                                    ], 
-                                    style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            ), 
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Specific SN Types:'
-                                    ], style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    dcc.Input(id='specific_type_input', type='text', placeholder='Separate with commas')
-                                    ], style={'width': '45%', 'height': '10px', 'display': 'inline-block'}
-                                ),
-                                html.Div(children=[
-                                    html.Button('Submit', id='specific_type_submit_button', n_clicks=0)
-                                    ], 
-                                    style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            ), 
-
-                            html.Div(style={'border': '1px black solid', 'margin':'5%', 'width': '90%'}),
-
-                            html.Div(children=[
-                                html.Div(children=[
-                                    'Reset Graph:'
-                                    ], 
-                                    style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                                ),
-                                html.Div(children=[
-                                    html.Button(
-                                        'Submit',
-                                        id='graph_reset_submit_button', n_clicks=0)
-                                    ], 
-                                    style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                                )
-                                ], 
-                                style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                            )
-
-                        ], 
-                        style={'width': '24vw', 'height': '63.5vh', 'overflowY': 'scroll'}
-                    )
-                    ],
-                    style= {
-                        'borderRight': '2px solid black', 
-                        'borderBottom': '2px solid black',
-                        'font-size': '10px', 
-                        'padding': '0.75vw', 
-                        'text-align': 'center', 
-                    },
-                    selected_style={
-                        'borderTop': 'None',
-                        'borderLeft': 'None', 
-                        'font-size': '10px', 
-                        'padding': '0.75vw', 
-                        'text-align': 'center', 
-                    }
-                ),
-
-                dcc.Tab(
-                    label='Graph Visuals',
-                    children=[
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Target Spread:'
-                                ], 
-                                style={'width': '30%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Slider(
-                                    id='target_spread_slider',
-                                    min=0.1,
-                                    max=3,
-                                    step=0.01,
-                                    value=1,
-                                    tooltip={'placement': 'bottom', 'always_visible': True},
-                                    vertical=False
-                                    )
-                                ], 
-                                style={'width': '70%', 'height': '10px', 'display': 'inline-block'})
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                        ),
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'SN Spread:'
-                                ], 
-                                style={'width': '30%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Slider(
-                                    id='source_spread_slider',
-                                    min=0.01,
-                                    max=0.3,
-                                    step=0.01,
-                                    value=0.1,
-                                    tooltip={'placement': 'bottom', 'always_visible': True},
-                                    vertical=False
-                                    )
-                                ], 
-                                style={'width': '70%', 'height': '10px', 'display': 'inline-block'})
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                        ), 
-
-                        html.Div(style={'border': '1px black solid', 'margin':'5%', 'width': '90%'}),
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Type Gradient Start:'
-                                ], 
-                                style={'width': '35%', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Input(id='type_gradient_start_input', type='text', placeholder='Specify in RGB, Hex Code, or HSL')
-                                ], 
-                                style={'width': '45%', 'display': 'inline-block'}
-                            ),
-                            html.Div(children=[
-                                html.Button('Submit', id='type_gradient_start_submit_button', n_clicks=0)
-                                ], 
-                                style={'width': '20%', 'display': 'inline-block'}
-                            )
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                        ),
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Type Gradient End:'
-                                ], 
-                                style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Input(id='type_gradient_end_input', type='text', placeholder='Specify in RGB, Hex Code, or HSL')
-                                ], 
-                                style={'width': '45%', 'height': '10px', 'display': 'inline-block'}
-                            ),
-                            html.Div(children=[
-                                html.Button('Submit', id='type_gradient_end_submit_button', n_clicks=0)
-                                ], 
-                                style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                            )
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                        ), 
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Type Color Map:'
-                                ], 
-                                style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Input(id='type_color_mapping_input', type='text', placeholder='type_1: color_1, type_2: color_2, etc.')
-                                ], 
-                                style={'width': '45%', 'height': '10px', 'display': 'inline-block'}
-                            ),
-                            html.Div(children=[
-                                html.Button('Submit', id='type_color_mapping_submit_button', n_clicks=0)
-                                ], 
-                                style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                            )
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}), 
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Target Color:'
-                                ], 
-                                style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                dcc.Input(id='target_color_mapping_input', type='text', placeholder='Specify in RGB, Hex Code, or HSL')
-                                ], 
-                                style={'width': '45%', 'height': '10px', 'display': 'inline-block'}
-                            ),
-                            html.Div(children=[
-                                html.Button('Submit', id='target_color_mapping_submit_button', n_clicks=0)
-                                ], 
-                                style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                            )
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'}
-                        ), 
-
-                        html.Div(children=[
-                            html.Div(children=[
-                                'Randomize Type Colors:'
-                                ], 
-                                style={'width': '35%', 'height': '10px', 'display': 'inline-block', 'font-size': '0.9vw'}
-                            ),
-                            html.Div(children=[
-                                html.Button('Submit', id='color_randomize_submit_button', n_clicks=0)
-                                ], 
-                                style={'width': '20%', 'height': '10px', 'display': 'inline-block'}
-                            )
-                            ], 
-                            style={'margin':'5%', 'width': '90%', 'height': '10%', 'display': 'inline-block'})
-
-                    ],
-                    style={
-                        'borderLeft': '2px solid black', 
-                        'borderBottom': '2px solid black',
-                        'font-size': '2vh', 
-                        'text-align': 'center'
-                    },
-                    selected_style={
-                        'borderTop': 'None',
-                        'borderRight': 'None', 
-                        'font-size': '2vh', 
-                        'text-align': 'center'
-                    }
-                )
-            ], 
-            style={'height': '15vh'}
-        )
-        ], 
-        style={'width': '24.5%', 'height': '70vmin', 'border':'2px black solid', 'display': 'inline-block', 'vertical-align': 'bottom'}
-    ),
-
-    html.Div(children=[
-        cyto.Cytoscape(
-            id='output_graph',
-            layout={'name': 'preset'},
-            style={'width': '100%', 'height': '100%'},
-            stylesheet=default_stylesheet,
-            elements=graph.elements,
-            boxSelectionEnabled=True
-        )
-        ], 
-        style={'width': '50%', 'height': '70vmin', 'border':'2px black solid', 'display': 'inline-block', 'vertical-align': 'bottom'}
-    ),
-    
-    html.Div(children=[
-        dcc.Tabs(
-            children=[
-                dcc.Tab(
-                    label='Node Data',
-                    children=[
-                        html.Div(children=[
-                            html.Div(children=[
-                                html.Div(
-                                    id='node_select_data_1',
-                                    children='Select Node(s)', 
-                                    style={'width': '99%', 'height': '99%'}
-                                )
-                                ]
-                            )
-                            ], 
-                            style={'overflowY':'scroll', 'height': '26.8vw'}
-                        )
-                    ],
-                    style= {
-                        'borderRight': '2px solid black', 
-                        'borderBottom': '2px solid black',
-                        'text-align': 'center'
-                    },
-                    selected_style={
-                        'text-align': 'center',
-                        'borderTop': 'None',
-                        'borderLeft': 'None'
-                    }
-                ),
-                dcc.Tab(
-                    label='Table Data',
-                    children=[
-                        html.Div(
-                            id='table_data', 
-                            children=[], 
-                            style={'overflowX': 'scroll', 'overflowY': 'scroll', 'height': '26.8vw'}
-                        )
-                    ],
-                    style= {
-                        'borderLeft': '2px solid black', 
-                        'borderBottom': '2px solid black',
-                        'text-align': 'center', 
-                    },
-                    selected_style={
-                        'text-align': 'center',
-                        'borderTop': 'None',
-                        'borderRight': 'None', 
-                    }
-                )
-            ]
-        )
-        ], 
-        style={'width': '24.5%', 'height': '70vmin', 'border':'2px black solid', 'display': 'inline-block', 'vertical-align': 'bottom'}
+cytoscape_graph = cyto.Cytoscape(
+    id='output_graph',
+    layout={'name': 'preset'},
+    style={'width': '100vw', 'height': '100vh'},
+    stylesheet=default_stylesheet,
+    elements=graph.elements,
+    boxSelectionEnabled=True
     )
-    ], 
-    style={}
+
+def server_layout():
+    ui_tracker.set_initial_state()
+
+    app_layout = html.Div([
+        html.Div(cytoscape_graph, style={'position': 'fixed', 'zIndex': '1', 'width': '99vw', 'height': '99vh'}),
+        html.Div(children=[
+            html.Div(children=[
+                dbc.Button(children=[
+                    'Expand Settings'
+                    ],
+                    id='settings_button',
+                    className=ui_tracker.settings_button_class,
+                    style={'width': '50%'}
+                ), 
+                dbc.Button(children=[
+                    'Reset Graph'
+                    ],
+                    id='reset_button',
+                    className='reset_button', 
+                    style={'width': '50%', 'background': 'linear-gradient(#8a0000,#af0000 40%, #8a0000'}
+                ) 
+                ], 
+                style={'width': '20vw', 'background': '#272B30'}
+            ),
+            dbc.Collapse(children=[
+                dbc.Button(
+                    'Graph Sliders',
+                    id='graph_sliders_button',
+                    className=ui_tracker.graph_sliders_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    graph_sliders,
+                    id='graph_sliders_collapse',
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Node Filtering',
+                    id='node_filtering_button',
+                    className=ui_tracker.node_filtering_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    node_filtering,
+                    id='node_filtering_collapse',
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Graph Spread',
+                    id='graph_spread_button',
+                    className=ui_tracker.graph_spread_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    graph_spread,
+                    id='graph_spread_collapse',
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Color Editing',
+                    id='color_editing_button',
+                    className=ui_tracker.color_editing_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    color_editing,
+                    id='color_editing_collapse',
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Node Data',
+                    id='node_data_button',
+                    className=ui_tracker.node_data_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    node_data,
+                    id='node_data_collapse',
+                    is_open=False
+                ), 
+                dbc.Button(
+                    'Table Data',
+                    id='table_data_button',
+                    className=ui_tracker.table_data_button_class,
+                    style={'width': '20vw'}
+                ), 
+                dbc.Collapse(
+                    table_data,
+                    id='table_data_collapse',
+                    is_open=False
+                )
+                ],
+                id='settings_collapse',
+                is_open=False, 
+                style={'width': '20vw'}
+            )
+            ], 
+            style={
+                'display': 'flex', 'flex-direction': 'column', 'marginLeft': '1vw', 
+                'marginTop': '1vh', 'width': 'fit-content', 'padding': '0px', 'background': '#32383E', 'border': 'none', 
+                'position': 'relative', 'zIndex': '22'}
+        )
+    ])
+    
+    return app_layout
+
+app.layout = server_layout
+
+@app.callback(
+    Output('settings_collapse', 'is_open'),
+    Output('settings_button', 'className'),
+    Output('settings_button', 'children'),
+    Input('settings_button', 'n_clicks')
 )
+def toggle_settings(settings_button_clicks):
+    if settings_button_clicks:
+        ui_tracker.settings_button_toggle = not ui_tracker.settings_button_toggle
+
+        if ui_tracker.settings_button_toggle:
+            ui_tracker.settings_button_class = 'button_enabled'
+            ui_tracker.settings_button_text = 'Collapse Settings'
+
+        else:
+            ui_tracker.settings_button_class = 'button_disabled'
+            ui_tracker.settings_button_text = 'Expand Settings'
+    
+    return [ui_tracker.settings_button_toggle, ui_tracker.settings_button_class, ui_tracker.settings_button_text]
+
+@app.callback(
+    Output('graph_sliders_collapse', 'is_open'),
+    Output('graph_sliders_button', 'className'),
+    Input('graph_sliders_button', 'n_clicks')
+)
+def toggle_left(graph_sliders_button_clicks):
+    if graph_sliders_button_clicks:
+        ui_tracker.graph_sliders_button_toggle = not ui_tracker.graph_sliders_button_toggle
+
+        if ui_tracker.graph_sliders_button_toggle:
+            ui_tracker.graph_sliders_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.graph_sliders_button_class = 'button_disabled'
+    
+    return [ui_tracker.graph_sliders_button_toggle, ui_tracker.graph_sliders_button_class]
+
+@app.callback(
+    Output('node_filtering_collapse', 'is_open'),
+    Output('node_filtering_button', 'className'),
+    Input('node_filtering_button', 'n_clicks')
+)
+def toggle_left(node_filtering_button_clicks):
+    if node_filtering_button_clicks:
+        ui_tracker.node_filtering_button_toggle = not ui_tracker.node_filtering_button_toggle
+
+        if ui_tracker.node_filtering_button_toggle:
+            ui_tracker.node_filtering_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.node_filtering_button_class = 'button_disabled'
+
+    return [ui_tracker.node_filtering_button_toggle, ui_tracker.node_filtering_button_class]
+
+@app.callback(
+    Output('graph_spread_collapse', 'is_open'),
+    Output('graph_spread_button', 'className'),
+    Input('graph_spread_button', 'n_clicks')
+)
+def toggle_left(graph_spread_button_clicks):
+    if graph_spread_button_clicks:
+        ui_tracker.graph_spread_button_toggle = not ui_tracker.graph_spread_button_toggle
+
+        if ui_tracker.graph_spread_button_toggle:
+            ui_tracker.graph_spread_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.graph_spread_button_class = 'button_disabled'
+
+    return [ui_tracker.graph_spread_button_toggle, ui_tracker.graph_spread_button_class]
+
+@app.callback(
+    Output('color_editing_collapse', 'is_open'),
+    Output('color_editing_button', 'className'),
+    Input('color_editing_button', 'n_clicks')
+)
+def toggle_left(color_editing_button_clicks):
+    if color_editing_button_clicks:
+        ui_tracker.color_editing_button_toggle = not ui_tracker.color_editing_button_toggle
+
+        if ui_tracker.color_editing_button_toggle:
+            ui_tracker.color_editing_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.color_editing_button_class = 'button_disabled'
+
+    return [ui_tracker.color_editing_button_toggle, ui_tracker.color_editing_button_class]
+
+@app.callback(
+    Output('node_data_collapse', 'is_open'),
+    Output('node_data_button', 'className'),
+    Input('node_data_button', 'n_clicks')
+)
+def toggle_left(node_data_button_clicks):
+    if node_data_button_clicks:
+        ui_tracker.node_data_button_toggle = not ui_tracker.node_data_button_toggle
+
+        if ui_tracker.node_data_button_toggle:
+            ui_tracker.node_data_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.node_data_button_class = 'button_disabled'
+
+    return [ui_tracker.node_data_button_toggle, ui_tracker.node_data_button_class]
+
+@app.callback(
+    Output('table_data_collapse', 'is_open'),
+    Output('table_data_button', 'className'),
+    Input('table_data_button', 'n_clicks')
+)
+def toggle_left(table_data_button_clicks):
+    if table_data_button_clicks:
+        ui_tracker.table_data_button_toggle = not ui_tracker.table_data_button_toggle
+
+        if ui_tracker.table_data_button_toggle:
+            ui_tracker.table_data_button_class = 'button_enabled'
+
+        else:
+            ui_tracker.table_data_button_class = 'button_disabled'
+
+    return [ui_tracker.table_data_button_toggle, ui_tracker.table_data_button_class]
 
 @app.callback(
     Output(component_id='output_graph', component_property='elements'),
-    Output(component_id='table_data', component_property='children'),
-    Output(component_id='hetesim_mean_range_slider', component_property='value'),
-    Output(component_id='hetesim_edge_range_slider', component_property='value'),
-    Output(component_id='node_max_slider', component_property='value'),
-    Output(component_id='specific_target_input', component_property='value'),
-    Output(component_id='specific_source_input', component_property='value'),
-    Output(component_id='specific_type_input', component_property='value'),
+    Output(component_id='node_hetesim_range_slider', component_property='value'),
+    Output(component_id='edge_hetesim_range_slider', component_property='value'),
+    Output(component_id='max_node_slider', component_property='value'),
+    Output(component_id='specific_target_dropdown', component_property='value'),
+    Output(component_id='specific_source_dropdown', component_property='value'),
+    Output(component_id='specific_type_dropdown', component_property='value'),
     Output(component_id='target_spread_slider', component_property='value'),
     Output(component_id='source_spread_slider', component_property='value'),
-    Output(component_id='type_gradient_start_input', component_property='value'),
-    Output(component_id='type_gradient_end_input', component_property='value'),
-    Output(component_id='type_color_mapping_input', component_property='value'),
-    Output(component_id='target_color_mapping_input', component_property='value'),
-    [Input(component_id='hetesim_mean_range_slider', component_property='value')],
-    [Input(component_id='hetesim_edge_range_slider', component_property='value')],
-    Input(component_id='node_max_slider', component_property='value'),
-    Input(component_id='target_spread_slider', component_property='value'),
-    Input(component_id='source_spread_slider', component_property='value'),
-    State(component_id='specific_target_input', component_property='value'),
-    Input(component_id='specific_target_submit_button', component_property='n_clicks'), 
-    State(component_id='specific_source_input', component_property='value'),
-    Input(component_id='specific_source_submit_button', component_property='n_clicks'), 
-    State(component_id='specific_type_input', component_property='value'),
-    Input(component_id='specific_type_submit_button', component_property='n_clicks'), 
-    State(component_id='type_gradient_start_input', component_property='value'),
-    Input(component_id='type_gradient_start_submit_button', component_property='n_clicks'), 
-    State(component_id='type_gradient_end_input', component_property='value'),
-    Input(component_id='type_gradient_end_submit_button', component_property='n_clicks'), 
-    State(component_id='type_color_mapping_input', component_property='value'),
-    Input(component_id='type_color_mapping_submit_button', component_property='n_clicks'),
-    State(component_id='target_color_mapping_input', component_property='value'),
-    Input(component_id='target_color_mapping_submit_button', component_property='n_clicks'), 
-    Input(component_id='graph_reset_submit_button', component_property='n_clicks'), 
-    Input(component_id='color_randomize_submit_button', component_property='n_clicks')
+    Output(component_id='gradient_start', component_property='value'), 
+    Output(component_id='gradient_end', component_property='value'), 
+    Output(component_id='selected_type_color', component_property='value'), 
+    Output(component_id='target_color', component_property='value'),
+    Output(component_id='data_table', component_property='columns'),
+    Output(component_id='data_table', component_property='data'),
+    [Input(component_id='node_hetesim_range_slider', component_property='value')],
+    [Input(component_id='edge_hetesim_range_slider', component_property='value')],
+    Input(component_id='max_node_slider', component_property='value'),
+    Input(component_id='specific_target_dropdown', component_property='value'), 
+    Input(component_id='specific_source_dropdown', component_property='value'), 
+    Input(component_id='specific_type_dropdown', component_property='value'), 
+    Input(component_id='target_spread_slider', component_property='value'), 
+    Input(component_id='source_spread_slider', component_property='value'), 
+    Input(component_id='gradient_start', component_property='value'), 
+    Input(component_id='gradient_end', component_property='value'), 
+    Input(component_id='selected_type_color', component_property='value'), 
+    Input(component_id='target_color', component_property='value'), 
+    Input(component_id='randomize_colors_button', component_property='n_clicks'), 
+    Input(component_id='reset_button', component_property='n_clicks'), 
+    prevent_initial_call=True
 )
-def update_graph_hetesim_slider(
-    input_mean_hetesim_range_value, 
-    input_edge_hetesim_range_value, 
-    max_node_slider_value, 
-    target_spread_val, 
-    sn_spread_val,
-    specific_targets_val, 
-    specific_targets_submit_count, 
-    specific_sources_val, 
-    specific_sources_submit_count, 
-    specific_types_val, 
-    specific_types_submit_count, 
-    type_gradient_start_val, 
-    type_gradient_start_submit_count, 
-    type_gradient_end_val, 
-    type_gradient_end_submit_count, 
-    type_color_mapping_val, 
-    type_color_mapping_submit_count, 
-    target_color_mapping_val, 
-    target_color_mapping_submit_count, 
-    graph_reset_submit_count, 
-    color_randomization_submit_count):
+def toggle_left(
+    input_node_hetesim_range_slider, 
+    input_edge_hetesim_range_slider, 
+    input_max_node_slider, 
+    input_specific_target_dropdown, 
+    input_specific_source_dropdown, 
+    input_specific_type_dropdown, 
+    input_target_spread,
+    input_sn_spread, 
+    input_gradient_start, 
+    input_gradient_end, 
+    input_selected_type_color,
+    input_target_color, 
+    input_randomize_colors_button_clicks, 
+    input_reset_button):
+    
+    if input_reset_button != graph.reset_button_clicks:
+        graph.reset_button_clicks = input_reset_button
 
-    if graph_reset_submit_count > graph.graph_reset_clicks:
-        graph.graph_reset_clicks = graph.graph_reset_clicks + 1
-
-        graph.target_spread = 1
-        graph.sn_spread = 0.1
-        graph.specified_targets=None
-        graph.specified_sources=None
-        graph.specified_types=None
-        graph.max_number_nodes=None
-        graph.min_mean_hetesim=0
-        graph.max_mean_hetesim=1
-        graph.min_edge_hetesim = 0
-        graph.max_edge_hetesim=1
+        graph.reset_graph()
 
         return [
-            graph.update_graph_elements(), 
-            graph.generate_table(), 
-            graph.mean_hetesim_range, 
-            [graph.min_edge_value, graph.max_edge_value], 
-            graph.max_node_count, 
-            '', 
-            '', 
-            '', 
-            1, 
-            0.1, 
-            '', 
-            '', 
-            '', 
-            '']
+            graph.starting_elements,
+            graph.node_hetesim_range, 
+            graph.edge_hetesim_range, 
+            graph.max_node_count,
+            graph.specific_target_dropdown, 
+            graph.specific_source_dropdown, 
+            graph.specific_type_dropdown, 
+            graph.target_spread, 
+            graph.sn_spread,
+            graph.gradient_start_initial, 
+            graph.gradient_end_initial, 
+            graph.selected_type_color_initial,
+            graph.target_color_initial, 
+            graph.data_table_columns, 
+            graph.starting_table_data
+            ]
 
-    targets_string_input = None
-    sources_string_input = None
-    type_string_input = None
+    if input_node_hetesim_range_slider != graph.node_hetesim_range:
+        graph.node_hetesim_range = input_node_hetesim_range_slider
 
-    if ((specific_targets_val != None) and (specific_targets_val != '')):
-        targets_string_input = []
-        for s in specific_targets_val.split(','):
-            targets_string_input.append(s.strip())
+    if input_edge_hetesim_range_slider != graph.edge_hetesim_range:
+        graph.edge_hetesim_range = input_edge_hetesim_range_slider
 
-    if ((specific_sources_val != None) and (specific_sources_val != '')):
-        sources_string_input = []
-        for s in specific_sources_val.split(','):
-            sources_string_input.append(s.strip())
+    if input_max_node_slider != graph.max_node_count:
+        graph.max_node_count = input_max_node_slider
 
-    if ((specific_types_val != None) and (specific_types_val != '')):
-        type_string_input = []
-        for s in specific_types_val.split(','):
-            type_string_input.append(s.strip())
+    if input_specific_target_dropdown != graph.specific_target_dropdown:
+        graph.specific_target_dropdown = input_specific_target_dropdown
 
-    if ((type_gradient_start_val != None) and (type_gradient_start_val != '')):
-        graph.type_pallet_start = type_gradient_start_val
+    if input_specific_source_dropdown != graph.specific_source_dropdown:
+        graph.specific_source_dropdown = input_specific_source_dropdown
 
-    if ((type_gradient_end_val != None) and (type_gradient_end_val != '')):
-        graph.type_pallet_end = type_gradient_end_val
+    if input_specific_type_dropdown != graph.specific_type_dropdown:
+        graph.specific_type_dropdown = input_specific_type_dropdown
 
-    if ((type_color_mapping_val != None) and (type_color_mapping_val != '')):
-        specified_type_color_dict = {}
-        for entry in type_color_mapping_val.split(','):
-            split_entry = entry.split(':')
-            specified_type_color_dict[split_entry[0].strip()] = split_entry[1].strip()
+    graph.target_spread = input_target_spread
+    graph.sn_spread = input_sn_spread
 
-        graph.type_color_mapping = specified_type_color_dict
+    if (input_gradient_start != graph.gradient_start) and (input_gradient_start != graph.gradient_start_initial):
+        ui_tracker.display_gradient_start_color = input_gradient_start
 
-    if ((target_color_mapping_val != None) and (target_color_mapping_val != '')):
-        graph.target_color_mapping = target_color_mapping_val
+        if input_gradient_end != graph.gradient_end_initial:
+            graph.gradient_start = input_gradient_start
+            graph.gradient_end = input_gradient_end
+            graph.gradient_color_primacy = True
+        
+    if (input_gradient_end != graph.gradient_end) and (input_gradient_end != graph.gradient_end_initial):
+        ui_tracker.display_gradient_end_color = input_gradient_end
 
-    if color_randomization_submit_count > graph.color_randomization_clicks:
-        graph.color_randomization_clicks = graph.color_randomization_clicks + 1
-        graph.type_pallet_start=None
-        graph.type_pallet_end=None
-        graph.target_color_mapping=None
-        graph.type_color_mapping=None
-        graph.random_color = True
+        if input_gradient_start != graph.gradient_start_initial:
+            graph.gradient_start = input_gradient_start
+            graph.gradient_end = input_gradient_end
+            graph.gradient_color_primacy = True
 
-    graph._generate_color_mapping()
-    graph.random_color = False
+    if (input_selected_type_color != graph.selected_type_color) and (input_selected_type_color != graph.selected_type_color_initial):
+        graph.selected_type_color = input_selected_type_color
 
-    graph.target_spread = target_spread_val
-    graph.sn_spread = sn_spread_val
-    graph.specified_targets = targets_string_input
-    graph.specified_sources=sources_string_input
-    graph.specified_types=type_string_input
-    graph.max_number_nodes=max_node_slider_value
-    graph.min_mean_hetesim=input_mean_hetesim_range_value[0]
-    graph.max_mean_hetesim=input_mean_hetesim_range_value[1]
-    graph.min_edge_hetesim=input_edge_hetesim_range_value[0]
-    graph.max_edge_hetesim=input_edge_hetesim_range_value[1]
+        ui_tracker.display_selected_type_color = input_selected_type_color
+        graph.type_color_primacy = True
+
+    if (input_target_color != graph.target_color) and (input_target_color != graph.target_color_initial):
+        graph.target_color = input_target_color
+
+        ui_tracker.display_target_color = input_target_color
+        graph.target_color_primacy = True
+
+    if input_randomize_colors_button_clicks != graph.randomized_color_button_clicks:
+        graph.randomized_color_button_clicks = input_randomize_colors_button_clicks
+
+        ui_tracker.display_gradient_start_color = graph.gradient_start_initial
+        ui_tracker.display_gradient_end_color = graph.gradient_end_initial
+        ui_tracker.display_selected_type_color = graph.selected_type_color_initial
+        ui_tracker.display_target_color = graph.target_color_initial
+        
+        graph.random_color_primacy = True
 
     return [
-        graph.update_graph_elements(), 
-        graph.generate_table(), 
-        [graph.min_mean_hetesim, graph.max_mean_hetesim], 
-        [graph.min_edge_hetesim, graph.max_edge_hetesim], 
-        graph.max_number_nodes, 
-        specific_targets_val, 
-        specific_sources_val, 
-        specific_types_val, 
-        target_spread_val, 
-        sn_spread_val, 
-        type_gradient_start_val, 
-        type_gradient_end_val, 
-        type_color_mapping_val, 
-        target_color_mapping_val]
+        graph.update_graph_elements(),
+        graph.node_hetesim_range, 
+        graph.edge_hetesim_range, 
+        graph.max_node_count,
+        graph.specific_target_dropdown, 
+        graph.specific_source_dropdown, 
+        graph.specific_type_dropdown, 
+        graph.target_spread, 
+        graph.sn_spread,
+        ui_tracker.display_gradient_start_color, 
+        ui_tracker.display_gradient_end_color, 
+        ui_tracker.display_selected_type_color,
+        ui_tracker.display_target_color, 
+        graph.data_table_columns, 
+        graph.table_data
+        ]
 
 @app.callback(
-    Output('node_select_data_1', 'children'),
+    Output('node_data', 'children'),
     Input('output_graph', 'selectedNodeData'))
-def displayTapNodeData(data):
+def displayTapNodeData(input_selected_nodes):
 
-    if (data == []) or (data == None):
+    if (input_selected_nodes == []) or (input_selected_nodes == None):
         return 'Select Node(s)'
+
+    formatted_node_data = graph.generate_node_data(input_selected_nodes)
 
     display_data = []
 
-    for i, node in enumerate(data):
-        if node['sn_or_tn'] == 'source_node':
-            display_data.append(html.Div( 
-                children=[graph.starting_nx_graph.nodes[node['id']]['name']], 
-                style={'font-weight': 'bold'}))
+    for i, node in enumerate(input_selected_nodes):
+        display_data.append(html.Div(
+            children=[
+                node['label']
+                ],
+                style={'font-weight': 'bold'}
+            )
+        )
 
-            edges = {}
-            for j, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
-                edges[str(graph.target_cui_target_name_dict[connecting_node]) + '(CUI: ' + str(connecting_node) + ')'] = np.round(graph.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3)
-
-            edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
-
-            data_dump = {
-                'node_cui': graph.starting_nx_graph.nodes[node['id']]['cui'], 
-                'node_name': graph.starting_nx_graph.nodes[node['id']]['name'], 
-                'node_type': graph.starting_nx_graph.nodes[node['id']]['type'], 
-                'mean_hetesim': np.round(graph.starting_nx_graph.nodes[node['id']]['mean_hetesim'], 3), 
-                'sn_or_tn': 'source_node', 
-                'edge_hetesim': edges_sorted
-                }
-
-            display_data.append(html.Pre(json.dumps(data_dump, indent=2)))
-
-        if node['sn_or_tn'] == 'target_node':
-            display_data.append(html.Div( 
-                children=[graph.starting_nx_graph.nodes[node['id']]['name']], 
-                style={'font-weight': 'bold'}))
-
-            edges = {}
-            for j, connecting_node in enumerate(graph.starting_nx_graph[node['id']]):
-                edges[str(graph.starting_nx_graph.nodes[connecting_node]['name']) + ' (CUI: ' + str(graph.starting_nx_graph.nodes[connecting_node]['cui']) + ')'] = float(np.round(graph.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3))
-            
-            edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
-
-            data_dump = {
-                'node_cui': graph.starting_nx_graph.nodes[node['id']]['id'], 
-                'node_name': graph.starting_nx_graph.nodes[node['id']]['name'], 
-                'sn_or_tn': 'target_node', 
-                'edge_hetesim': edges_sorted
-                }
-
-            display_data.append(html.Pre(json.dumps(data_dump, indent=2)))
+        display_data.append(html.Pre(formatted_node_data[i]))
 
     return display_data
 
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-# Future Ideas:
-# Add additional tab for instructions, etc.
-# Select edge Data
-# User set target node positions and simulate sources
-# User specified node coloring
-# Host on website ORRRRRR Just run the app within a notebook... provide the link
-# Truly randomize colors given one, two etc. types

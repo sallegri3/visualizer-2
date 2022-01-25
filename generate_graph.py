@@ -2,27 +2,20 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 import itertools
-import dash
-import dash_cytoscape as cyto
-import dash_html_components as html
-import plotly.graph_objects as go
 import networkx as nx
 import pandas as pd
-import time
-from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
-import dash_table as dt
 import json
 from colour import Color
 
 class Generate_Graph:
     def __init__(self, df_list=None, target_cui_target_name_dict=None) -> None:
 
-        self.sn_cui_sn_name_dict = {}
-
         self._format_data(df_list, target_cui_target_name_dict)
+        self._initialize_starting_elements()
+        self._adjust_data()
+
         self._generate_color_mapping()
-        self._generate_table()
+        self.starting_table_data = self._generate_table()
 
         self.starting_nx_graph = self._generate_nx_graph()
         self.starting_elements = self.generate_graph_elements()
@@ -165,6 +158,12 @@ class Generate_Graph:
         self.combined_formatted_df = pd.concat(formatted_df_list)
         self.unique_types = sorted(self.combined_formatted_df['type'].unique())
 
+        # self.adjusted_df_list = self.formatted_df_list.copy()
+
+        return formatted_df_list
+
+    def _initialize_starting_elements(self):
+
         # Node HeteSim slider value initialization
         self.node_hetesim_range = [
             np.round(self.combined_formatted_df['mean_hetesim'].min(), 3), 
@@ -185,13 +184,13 @@ class Generate_Graph:
 
         # Edge HeteSim slider value initialization
         min_edge_value = np.inf
-        for df in formatted_df_list:
+        for df in self.formatted_df_list:
             if df['hetesim'].min() < min_edge_value:
                 min_edge_value = df['hetesim'].min()
         self.min_edge_value = min_edge_value
 
         max_edge_value = -np.inf
-        for df in formatted_df_list:
+        for df in self.formatted_df_list:
             if df['hetesim'].max() > max_edge_value:
                 max_edge_value = df['hetesim'].max()
         self.max_edge_value = max_edge_value
@@ -215,7 +214,7 @@ class Generate_Graph:
 
         # Max node slider value initialization
         max_node_count = 0
-        for df in formatted_df_list:
+        for df in self.formatted_df_list:
             if df.shape[0] > max_node_count:
                 max_node_count = df.shape[0]
         self.max_node_count = int(max_node_count / 2)
@@ -272,7 +271,7 @@ class Generate_Graph:
         self.gradient_end_initial = self.gradient_end    
 
         # SN type color initialization
-        self.selected_types = {}
+        self.selected_types = set()
         self.selected_type_color = '#272B30'
         self.type_color_primacy = False
         self.selected_type_color_initial = self.selected_type_color
@@ -289,10 +288,6 @@ class Generate_Graph:
 
         # Reset button
         self.reset_button_clicks = None
-        
-        self.adjusted_df_list = formatted_df_list.copy()
-
-        return formatted_df_list
     
     def _adjust_data(self):
 
@@ -314,7 +309,7 @@ class Generate_Graph:
             adjusted_df_list = self._adjust_specific_source_dropdown(adjusted_df_list)
 
         if self.specific_type_dropdown != self.specific_type_dropdown_initial:
-            adjusted_df_list = self._adjust_specific_type_dropdown(adjusted_df_list)           
+            adjusted_df_list = self._adjust_specific_type_dropdown(adjusted_df_list)      
         
         self.adjusted_df_list = adjusted_df_list
 
@@ -368,6 +363,7 @@ class Generate_Graph:
     def generate_graph_elements(self):
 
         elements = []
+
         for node in self.nx_graph.nodes:
             if self.nx_graph.nodes[node]['sn_or_tn'] == 'target_node':
                 elements.append({
@@ -403,7 +399,8 @@ class Generate_Graph:
         return elements
 
     def update_graph_elements(self):
-
+        
+        self._generate_color_mapping()
         self._adjust_data()
         self._generate_nx_graph()
         self.generate_graph_elements()
@@ -514,6 +511,51 @@ class Generate_Graph:
 
         return adjusted_df_list
 
+    def generate_node_data(self, selected_nodes_list):
+
+        formatted_data_list = []
+
+        for node in selected_nodes_list:
+            if node['sn_or_tn'] == 'source_node':
+                self.selected_types.add(self.starting_nx_graph.nodes[node['id']]['type'])
+
+                edges = {}
+                for _, connecting_node in enumerate(self.starting_nx_graph[node['id']]):
+                    edges[str(self.target_cui_target_name_dict[connecting_node]) + ' (CUI:' + str(connecting_node) + ')'] = float(np.round(self.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3))
+
+                edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
+
+                data_dump = {
+                    'node_cui': self.starting_nx_graph.nodes[node['id']]['cui'], 
+                    'node_name': self.starting_nx_graph.nodes[node['id']]['name'], 
+                    'node_type': self.starting_nx_graph.nodes[node['id']]['type'], 
+                    'mean_hetesim': float(np.round(self.starting_nx_graph.nodes[node['id']]['mean_hetesim'], 3)), 
+                    'sn_or_tn': 'source_node', 
+                    'edge_hetesim': edges_sorted
+                    }
+
+                formatted_data_list.append(json.dumps(data_dump, indent=2))
+
+            if node['sn_or_tn'] == 'target_node':
+
+                edges = {}
+                for _, connecting_node in enumerate(self.starting_nx_graph[node['id']]):
+                    edges[str(self.starting_nx_graph.nodes[connecting_node]['name']) + ' (CUI:' + str(self.starting_nx_graph.nodes[connecting_node]['cui']) + ')'] = float(np.round(self.starting_nx_graph[node['id']][connecting_node]['hetesim'], 3))
+                
+                edges_sorted = dict(sorted(edges.items(), key=lambda item: item[1], reverse=True))
+
+                data_dump = {
+                    'node_cui': self.starting_nx_graph.nodes[node['id']]['id'], 
+                    'node_name': self.starting_nx_graph.nodes[node['id']]['name'], 
+                    'sn_or_tn': 'target_node', 
+                    'edge_hetesim': edges_sorted
+                    }
+
+                formatted_data_list.append(json.dumps(data_dump, indent=2))
+
+        return formatted_data_list
+
+
     def _generate_table(self):
 
         combined_df_generating = pd.concat(self.adjusted_df_list)
@@ -533,3 +575,5 @@ class Generate_Graph:
         self.table_data = combined_df_local
         self.data_table_columns = [{"name": i, "id": i} for i in combined_df_local.columns]
         self.table_data = combined_df_local.to_dict('records')
+
+        return self.table_data
