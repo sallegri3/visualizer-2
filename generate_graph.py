@@ -229,7 +229,7 @@ class Generate_Graph:
         self.specific_target_input_options = []
         inverted_target_cui_target_name_dict = {v: k for k, v in self.target_cui_target_name_dict.items()}
 
-        for entry in sorted([*self.target_cui_target_name_dict.values()]):
+        for entry in sorted([self.target_cui_target_name_dict.values()]):
             self.specific_target_input_options.append({'label': entry, 'value': inverted_target_cui_target_name_dict[entry]})
 
         self.specific_target_dropdown_initial = self.specific_target_dropdown
@@ -240,8 +240,10 @@ class Generate_Graph:
         self.specific_source_input_options = []
         inverted_sn_cui_sn_name_dict = {v: k for k, v in self.sn_cui_sn_name_dict.items()}
 
-        for entry in sorted([*self.sn_cui_sn_name_dict.values()]):
+        for entry in sorted([self.sn_cui_sn_name_dict.values()]):
             self.specific_source_input_options.append({'label': entry, 'value': inverted_sn_cui_sn_name_dict[entry]})
+
+        self.specific_source_input_options_initial = self.specific_source_input_options
 
         self.specific_source_dropdown_initial = self.specific_source_dropdown
 
@@ -295,6 +297,7 @@ class Generate_Graph:
 
         if self.max_node_count != self.max_node_count_initial:
             adjusted_df_list = self._adjust_max_nodes(adjusted_df_list)
+            self._adjust_dropdown_options(adjusted_df_list)
 
         if self.node_hetesim_range != self.node_hetesim_range_initial:
             adjusted_df_list = self._adjust_node_hetesim_range(adjusted_df_list)
@@ -314,6 +317,8 @@ class Generate_Graph:
         self.adjusted_df_list = adjusted_df_list
 
         self._generate_table()
+
+        self.specific_source_input_options = None
 
     def _generate_nx_graph(self):
 
@@ -510,6 +515,19 @@ class Generate_Graph:
             adjusted_df_list.append(df[df['type'].isin(self.specific_type_dropdown)])
 
         return adjusted_df_list
+
+    def _adjust_dropdown_options(self, df_list):
+        specific_source_input_options_list = []
+        remaining_sources = []
+
+        for df in df_list:
+            remaining_sources = remaining_sources + list(df['sn_cui'].unique())
+
+        for entry in self.specific_source_input_options_initial:
+            if entry['value'] in remaining_sources:
+                specific_source_input_options_list.append({'label': entry['label'], 'value': entry['value']})
+
+        self.specific_source_input_options = specific_source_input_options_list
 
     def generate_node_data(self, selected_nodes_list):
 

@@ -1,4 +1,3 @@
-import base64
 import dash
 import dash_cytoscape as cyto
 import dash_html_components as html
@@ -6,10 +5,9 @@ import dash_core_components as dcc
 import dash_table as dt
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
+
 import base64
 import json
-
-import ast
 
 from generate_graph import Generate_Graph
 
@@ -354,8 +352,11 @@ def parse_contents(json_input, filenames):
         decoded = base64.b64decode(content_string)
 
         try:
+            '''
             if 'json' in filenames[i]:
                 formatted_json['semnet_run_' + str(i)] = json.loads(decoded)
+            '''
+            formatted_json = json.loads(decoded)
 
         except Exception as e:
             print(e)
@@ -749,7 +750,7 @@ def toggle_left(
 
     else:
         elements = graph.update_graph_elements()
-    
+
     return [
         elements,
         graph.node_hetesim_range_start,
