@@ -3,7 +3,6 @@ import pandas as pd
 import networkx as nx
 import itertools
 import networkx as nx
-import pandas as pd
 import json
 from colour import Color
 
