@@ -14,5 +14,6 @@ setup(
                 'numpy', 
                 'pandas', 
                 'networkx==2.6.3', 
-                'colour']
+                'colour'
+                ]
 )
