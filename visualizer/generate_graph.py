@@ -11,48 +11,21 @@ import time
 
 class Generate_Graph:
     def __init__(self, json_input=None) -> None:
-
-        # print('-----------')
-        # current_time = time.time()
-
         self.data_list = []
-
+        
         self._format_data(json_input)
-
-        # print('format data: ' + str(time.time() - current_time))
-        # current_time = time.time()
 
         self._initialize_starting_elements()
 
-        # print('starting elements: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
         self._adjust_data()
-
-        # print('adjust data: ' + str(time.time() - current_time))
-        # current_time = time.time()
 
         self._generate_color_mapping()
 
-        # print('generate color: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
         self.table_data_initial = self._generate_table()
-
-        # print('table data: ' + str(time.time() - current_time))
-        # current_time = time.time()
 
         self.starting_nx_graph = self._generate_nx_graph()
 
-        # print('starting nx graph: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
         self.starting_elements = self.generate_graph_elements()
-
-        # print('starting elements: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
-        # print('-----------')
 
     def reset_graph(self):
 
@@ -484,33 +457,13 @@ class Generate_Graph:
 
     def update_graph_elements(self):
 
-        # print('----------')
-        # current_time = time.time()
-
         self._generate_color_mapping()
-
-        # print('generate color:  ' + str(time.time() - current_time))
-        # current_time = time.time()
 
         self._adjust_data()
 
-        # print('adjust data: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
-        # self._generate_nx_graph()
         self._trim_graph()
 
-        # print('nx graph: ' + str(time.time() - current_time))
-        # current_time = time.time()
-
         self.generate_graph_elements()
-
-        # self._trim_graph()
-
-        # print('generate elements: ' + str(time.time() - current_time))
-        # current_time = time.time()    
-
-        # print('-----------')    
 
         return self.elements
 
