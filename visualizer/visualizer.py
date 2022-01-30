@@ -1,10 +1,11 @@
 import dash
 import dash_cytoscape as cyto
-import dash_html_components as html
-import dash_core_components as dcc
-import dash_table as dt
 import dash_bootstrap_components as dbc
+
 from dash.dependencies import Input, Output
+from dash import html
+from dash import dash_table as dt
+from dash import dcc
 
 import base64
 import json
@@ -352,10 +353,6 @@ def parse_contents(json_input, filenames):
         decoded = base64.b64decode(content_string)
 
         try:
-            '''
-            if 'json' in filenames[i]:
-                formatted_json['semnet_run_' + str(i)] = json.loads(decoded)
-            '''
             formatted_json = json.loads(decoded)
 
         except Exception as e:
@@ -687,6 +684,12 @@ def toggle_left(
 
     if input_specific_type_dropdown != graph.specific_type_dropdown:
         graph.specific_type_dropdown = input_specific_type_dropdown
+
+    if input_target_spread != graph.target_spread:
+        graph.target_spread = input_target_spread
+
+    if input_sn_spread != graph.sn_spread:
+        graph.sn_spread = input_sn_spread
 
     graph.target_spread = input_target_spread
     graph.sn_spread = input_sn_spread

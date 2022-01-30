@@ -2,7 +2,6 @@ import pandas as pd
 import json
 import os
 
-
 def generate_formatted_dict(semnet_df_list=list, export=False, filename='semnet_json_data'):
     formatted_dict = {}
 
@@ -24,7 +23,6 @@ def generate_formatted_dict(semnet_df_list=list, export=False, filename='semnet_
 
     return formatted_dict
 
-
 def visualizer_json_from_dicts(semnet_dict_list=list, export=False, filename='semnet_combined_json_data'):
     final_dict = {}
 
@@ -36,7 +34,6 @@ def visualizer_json_from_dicts(semnet_dict_list=list, export=False, filename='se
             json.dump(final_dict, outfile)
 
     return final_dict
-
 
 def generate_formatted_dict_from_path(path=str, export=False, filename='semnet_json_data'):
     df_list = []
@@ -70,5 +67,3 @@ def visualizer_json_from_path(path=str, export=False, filename='semnet_combined_
             json.dump(final_output_dict, outfile)
 
     return final_output_dict
-
-visualizer_json_from_path('D:\\GT_Research\\mitchell_lab\\semnet_visualizer_v2.0\\visualizer-2_repository\\visualizer-2\\semnet_run_data_2', True)

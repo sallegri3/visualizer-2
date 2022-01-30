@@ -7,20 +7,52 @@ import pandas as pd
 import json
 from colour import Color
 
+import time
+
 class Generate_Graph:
     def __init__(self, json_input=None) -> None:
+
+        # print('-----------')
+        # current_time = time.time()
 
         self.data_list = []
 
         self._format_data(json_input)
+
+        # print('format data: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self._initialize_starting_elements()
+
+        # print('starting elements: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self._adjust_data()
 
+        # print('adjust data: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self._generate_color_mapping()
+
+        # print('generate color: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self.table_data_initial = self._generate_table()
 
+        # print('table data: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self.starting_nx_graph = self._generate_nx_graph()
+
+        # print('starting nx graph: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self.starting_elements = self.generate_graph_elements()
+
+        # print('starting elements: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
+        # print('-----------')
 
     def reset_graph(self):
 
@@ -270,8 +302,11 @@ class Generate_Graph:
         # TN/SN spread initialization
         self.target_spread = 1
         self.target_spread_initial = self.target_spread
+        self.target_spread_previous = 1
+
         self.sn_spread = 0.1
         self.sn_spread_initial = self.sn_spread
+        self.sn_spread_previous = 0.1
 
         # Gradient start initialization
         self.gradient_start = '#272B30'
@@ -317,16 +352,55 @@ class Generate_Graph:
 
         if self.specific_type_dropdown != self.specific_type_dropdown_initial:
             adjusted_df_list = self._adjust_specific_type_dropdown(adjusted_df_list)
-        
+
         self._adjust_specific_source_options(adjusted_df_list)
         
         self.adjusted_df_list = adjusted_df_list
 
+        self.combined_adjusted_df = pd.concat(self.adjusted_df_list, ignore_index=True)
+
         self._generate_table()
 
-    def _generate_nx_graph(self):
+    def _trim_graph(self):
+        if self.target_spread != self.target_spread_previous:
+            self._generate_nx_graph()
+            self.target_spread_previous = self.target_spread
 
-        self.combined_adjusted_df = pd.concat(self.adjusted_df_list)
+        elif self.sn_spread != self.sn_spread_previous:
+            self._generate_nx_graph()
+            self.sn_spread_previous = self.sn_spread
+        
+        elif self.combined_adjusted_df.shape[0] > len(self.adjusted_nx_graph.edges):
+            self._generate_nx_graph()
+            
+        else:
+            remaining_edges_df = self.combined_adjusted_df[['sn_id', 'target']]
+            total_edges_df = self.combined_formatted_df[['sn_id', 'target']]
+
+            remove_edges_df = total_edges_df[~total_edges_df.apply(tuple, 1).isin(remaining_edges_df.apply(tuple, 1))]
+
+            remove_edges_list = remove_edges_df.to_records(index=False)
+            remove_nodes_list = remove_edges_df['sn_id'].to_list()
+
+            remove_edges_list_formatted = []
+            remove_nodes_list_formatted = []
+
+            for edge in remove_edges_list:
+                remove_edges_list_formatted.append(tuple(edge))
+
+            temporary_graph = self.adjusted_nx_graph.copy()
+            temporary_graph.remove_edges_from(remove_edges_list_formatted)
+            temporary_graph.remove_nodes_from(list(nx.isolates(temporary_graph)))
+
+            for _, row in self.combined_adjusted_df.iterrows():
+                temporary_graph.nodes[row['sn_id']]['color'] = str(self.type_color_dict[self.sn_type_dict_formatted[row['sn_id']]])
+
+            for target_cui in self.combined_adjusted_df['target'].unique():
+                temporary_graph.nodes[target_cui]['color'] = self.type_color_dict['target']
+            
+            self.nx_graph = temporary_graph
+
+    def _generate_nx_graph(self):
 
         target_edges = []
         for relationship in self.target_relationship_list_formatted:
@@ -344,8 +418,8 @@ class Generate_Graph:
             fixed_list.append(entry)
 
         final_graph = nx.from_pandas_edgelist(self.combined_adjusted_df, 'sn_id', 'target', ['sn_name', 'sn_cui', 'hetesim', 'mean_hetesim'])
-        final_spring_graph = nx.spring_layout(final_graph, dim=2, pos=pos_dict, fixed=fixed_list, k=self.sn_spread, iterations=100)
-
+        final_spring_graph = nx.spring_layout(final_graph, dim=2, pos=pos_dict, fixed=fixed_list, k=self.sn_spread, iterations=20)
+        
         for _, row in self.combined_adjusted_df.iterrows():
             final_graph.nodes[row['sn_id']]['id'] = row['sn_id']
             final_graph.nodes[row['sn_id']]['cui'] = row['sn_cui']
@@ -366,6 +440,7 @@ class Generate_Graph:
             final_graph.nodes[target_cui]['position'] = {'x': 100 * final_spring_graph[target_cui][0], 'y': 100 * final_spring_graph[target_cui][1]}
 
         self.nx_graph = final_graph
+        self.adjusted_nx_graph = final_graph
 
         return final_graph
 
@@ -408,11 +483,34 @@ class Generate_Graph:
         return elements
 
     def update_graph_elements(self):
-        
+
+        # print('----------')
+        # current_time = time.time()
+
         self._generate_color_mapping()
+
+        # print('generate color:  ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self._adjust_data()
-        self._generate_nx_graph()
+
+        # print('adjust data: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
+        # self._generate_nx_graph()
+        self._trim_graph()
+
+        # print('nx graph: ' + str(time.time() - current_time))
+        # current_time = time.time()
+
         self.generate_graph_elements()
+
+        # self._trim_graph()
+
+        # print('generate elements: ' + str(time.time() - current_time))
+        # current_time = time.time()    
+
+        # print('-----------')    
 
         return self.elements
 
