@@ -45,6 +45,10 @@
   background: linear-gradient(#8a0000,#af0000 40%, #8a0000);
 }
 
+.misc_button {
+  background: linear-gradient(#8a5a00,#b17400 40%, #8a5a00);
+}
+
 ::-webkit-scrollbar {
     background: #32383E;
     width: 8px;

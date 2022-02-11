@@ -1,0 +1,326 @@
+,source_node,source_name,source_type,target_node,target_name,hetesim_score
+0,C0021641,Insulin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.14036685855101802
+1,C0008377,cholesterol,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.1151821645482455
+2,C0041004,Triglycerides,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.1133225690714127
+3,C0299583|3952,leptin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10997996308284298
+4,C1448177|7124,"TNF protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.1066984410495808
+5,C0001962,ethanol,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10535204033689238
+6,C0021665,Insulin-Like Growth Factor I,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10372872805823749
+7,C0079189,cytokine,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10286071609987553
+8,C0014939,estrogens,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10208535342156408
+9,C0028128,nitric oxide,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10100223875359951
+10,C0006675,calcium,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.10014245958626217
+11,C0003402,Antioxidants,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.099722827830918
+12,C0006560,C-reactive protein,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09874518429104465
+13,C0669365|4846,"NOS3 protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09833334717539846
+14,C0597357,receptor,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0974663995027184
+15,C0039601,testosterone,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09745357192873573
+16,C0021753,"interleukin-1, beta",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09650981954059672
+17,C0003968,ascorbic acid,CARB,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09592295071801492
+18,C0005802,Blood Glucose,CARB,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0936220282807774
+19,C0025598,metformin,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09356058313094232
+20,C0162772,Reactive Oxygen Species,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0934995451749281
+21,C0017710,Glucocorticoids,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09203346520466629
+22,C0025219,melatonin,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09117613765546102
+23,C0023820,Lipoproteins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.09032126432322886
+24,C0037663,Growth Hormone,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08973329487223622
+25,C0042866,vitamin D,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08876146508861621
+26,C0911014,ghrelin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08702680569960383
+27,C0003241,Antibodies,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0867511665004579
+28,C0011777,dexamethasone,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08560855877254529
+29,C0043481,zinc,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08546451432550445
+30,C0012854,DNA,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08463762359351372
+31,C0009325,collagen,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08374001651478614
+32,C0020281,hydrogen peroxide,INCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08328405634185622
+33,C0038317,Steroids,STRD,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08318074946633822
+34,C1366832|51761,NAME_NOT_FOUND,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08269349165694805
+35,C0030054,oxygen,ELII,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08264182687312556
+36,C0007004,Carbohydrates,CARB,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08203192026708778
+37,C0360714,Hydroxymethylglutaryl-CoA Reductase Inhibitors,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08201339362555561
+38,C0023822,High Density Lipoprotein Cholesterol,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08098955443868718
+39,C0003595|348,Apolipoprotein E,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.08086917200708169
+40,C0669372|4843,"NOS2A protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07980407270951054
+41,C0028754,Obesity,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07932615883719453
+42,C0011847,Diabetes,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07860945129143507
+43,C1171892|7422,"VEGF protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07823364137855489
+44,C0024467,magnesium,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07635741229330513
+45,C0596902,Membrane Transport Proteins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07577768361050667
+46,C0007412,Catecholamines,NSBA,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07484028923855679
+47,C0017817,glutathione,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07411590035080445
+48,C0166417,PPAR gamma,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07410554444844358
+49,C0080222|7040,"TGFB1 protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07278934099440924
+50,C0002059,Alkaline Phosphatase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07245800354975131
+51,C0032821,potassium,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07235977118061089
+52,C0040648,TRANSCRIPTION FACTOR,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07207676549064042
+53,C0036581,selenium,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0712734794428479
+54,C0017861,glycerin,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07101239922716658
+55,C0003320,Antigens,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0709953080828648
+56,C0017687,glucagon,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07095339156083803
+57,C1101610,MicroRNAs,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07091938855336258
+58,C0017687|2641,glucagon,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0708202484724153
+59,C0003242,"Antibodies, Anti-Idiotypic",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0707147989570821
+60,C0002006,aldosterone,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07062433209003834
+61,C0040135,Thyroid Hormones,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07046402216754212
+62,C0016693,Free Radicals,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.07031089231342683
+63,C0042839,vitamin A,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06976812084070573
+64,C0079419|7157,TP53 gene,GNGM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06945246222772136
+65,C0041249,tryptophan,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06940904552003507
+66,C0037473,sodium,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06897736547400729
+67,C0001645,Adrenergic beta-Antagonists,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06875656115162744
+68,C0132555,Nitric Oxide Synthase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06797503670640158
+69,C0033371|5617,prolactin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0676588505512703
+70,C0003779,argipressin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06750001228883837
+71,C0011185,prasterone,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06714435776919388
+72,C0020063|5741,"PTH protein, human",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0670940664731413
+73,C0020538,Hypertensive disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0659868395192809
+74,C0042890,Vitamins,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06578340902556956
+75,C0041942,urea,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06552129265960017
+76,C0021747,Interferons,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0650604374115329
+77,C0033567,epoprostenol,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06502534468664152
+78,C0033607,Protease Inhibitors,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06429221641233185
+79,C0024337,lysine,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0639867272620942
+80,C0001455,cyclic AMP,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06341443055799614
+81,C0007222,Cardiovascular Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06310324695545587
+82,C0037657,Somatomedins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06304693913016218
+83,C0282554,chemokine,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06280879755605212
+84,C0033371,prolactin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06229757382347049
+85,C0021758,interleukin-4,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.062145077879179944
+86,C0948265,NAME_NOT_FOUND,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.062082069392413924
+87,C0023870,lithium,ELII,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06158494740312423
+88,C0242275|1950,epidermal growth factor,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.061234787992171726
+89,C0041485,tyrosine,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.061059550951566455
+90,C0004153,Atherosclerosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06083954166440927
+91,C0017968,Glycoproteins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06083769978526812
+92,C0029419,Osteocalcin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.06002839086579947
+93,C0040845,tretinoin,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.059695231399435646
+94,C1305923,Polypeptides,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.058948477846812064
+95,C0085201,Apolipoprotein A-I,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05857659596606176
+96,C0053396,beta carotene,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05806380965543365
+97,C0004358,Autoantibodies,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0579577812979344
+98,C0067385,"N,N-dimethylarginine",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05780868275634559
+99,C0011849,Diabetes Mellitus,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.057011759112400896
+100,C0012929,"DNA, Mitochondrial",BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.056764523088408535
+101,C0040615,Antipsychotic Agents,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0565809460131457
+102,C0006826,Malignant Neoplasms,NEOP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05568084135774686
+103,C0034804,Estrogen Receptors,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.055631524266817396
+104,C0033382,proline,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05543714909462471
+105,C0009905,"Contraceptives, Oral",PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05467675992408084
+106,C0011854,"Diabetes Mellitus, Insulin-Dependent",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.054650690229499435
+107,C0002932,Anesthetics,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.054004331491455095
+108,C0040160,thyrotropin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05301547759967544
+109,C0108082,Vitamin D3 Receptor,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05295719315515207
+110,C0027051,Myocardial Infarction,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05266141655502815
+111,C0002395,Alzheimer's Disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05263249406609429
+112,C0380603,Fibroblast Growth Factor 2,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.052542765514532144
+113,C0022917,Lactate Dehydrogenase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05228281676206368
+114,C0027021,peroxidase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.052153231611832794
+115,C0017040,Gamma-glutamyl transferase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.052137571869581574
+116,C0038454,Cerebrovascular accident,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.052115148494999035
+117,C0021311,NAME_NOT_FOUND,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.051402203364350696
+118,C0037533,sodium nitroprusside,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.051331584394682356
+119,C0024706,manganese,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05120662412680276
+120,C0086376,GTP-Binding Proteins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.05097255864964115
+121,C0752046,Single Nucleotide Polymorphism,NUSQ,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0505623185091956
+122,C0040577,Trace Elements,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.050079898978206944
+123,C0036883,Sex Hormone-Binding Globulin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.049596792092749024
+124,C0010068,Coronary heart disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0490056741414902
+125,C0022661,"Kidney Failure, Chronic",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.048773256820266446
+126,C0400966,Non-alcoholic Fatty Liver Disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.048643072523481726
+127,C0006668,calcitonin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04840350694734787
+128,C0001899,Alanine Transaminase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04829270157241993
+129,C0004096,Asthma,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.047309362350580815
+130,C0242339,Dyslipidemias,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.047292288906478186
+131,C0032952,prednisone,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04680205463367591
+132,C0040162,thyrotropin-releasing hormone,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04668177244735042
+133,C0014822,Erythropoietin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.046072484170870405
+134,C0123707,Insulin-Like Growth Factor Binding Protein 3,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04535768510826095
+135,C0169964,somatropin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04526014690960058
+136,C0027895,Neuropeptides,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0452368162643855
+137,C0856169,Endothelial dysfunction,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04477871390787539
+138,C0025517,Metabolic Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04452601372015979
+139,C0031253,Pesticides,HOPS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04450618977433105
+140,C0022658,Kidney Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04390769559344045
+141,C1515075,NAME_NOT_FOUND,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.043614507743351155
+142,C0039840,thiamine,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0435391307227981
+143,C0017757,Glucosephosphate Dehydrogenase,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04313567914637395
+144,C0005823,Blood Pressure,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04276264989763948
+145,C0003873,Rheumatoid Arthritis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04265576150023372
+146,C0050668,Activins,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04240286691269545
+147,C0008679,Chronic disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04219273552652547
+148,C0032460,Polycystic Ovary Syndrome,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.042013485598887935
+149,C0032914,Pre-Eclampsia,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04200343674005535
+150,C1611640,Therapeutic agent (substance),PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04191227643188401
+151,C0850624,cardiovascular risk factor,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0418666634485495
+152,C0031507,phenytoin,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.041862530917782526
+153,C0017732,NAME_NOT_FOUND,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0414645517476989
+154,C0085207,Gestational Diabetes,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04140049902415746
+155,C0018270,Growth,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04124242263205694
+156,C0011065,Cessation of life,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04121671403102438
+157,C0162429,Malnutrition,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.04100786202038147
+158,C0024117,Chronic Obstructive Airway Disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.040026929815878944
+159,C0162638,Apoptosis,CELF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03979770407237491
+160,C0018799,Heart Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.039643618966743725
+161,C0543467,Operative Surgical Procedures,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.039608591913454484
+162,C1533685,Injection procedure,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03948692034575693
+163,C0245382,Galectin 3,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03898649446325198
+164,C0025519,Metabolism,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.038752813953665276
+165,C0040808,Treatment Protocols,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03867409638188792
+166,C0857127,Induction procedure,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0384605928351547
+167,C0520679,"Sleep Apnea, Obstructive",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.038442471433788136
+168,C0023895,Liver diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.038417949674947334
+169,C1144709,Natriuretic Peptides,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03830060129978354
+170,C0042373,Vascular Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03829483160757541
+171,252995,NAME_NOT_FOUND,GNGM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03827057874025136
+172,C0019868,Homeostasis,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03825196730398186
+173,C0019693,HIV Infections,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.038049552666106545
+174,C0026769,Multiple Sclerosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.037919795447483695
+175,C0011884,Diabetic Retinopathy,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03774326983238173
+176,C0032961,Pregnancy,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03760112238471263
+177,C0010137,cortisone,HORM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.037214060419241454
+178,C0013216,Pharmacotherapy,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03716169345891058
+179,C0042769,Virus Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03715215575000926
+180,C0014653,Equilibrium,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03696171473607611
+181,C0021756|3558,Interleukin-2,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03676470063688594
+182,C0577749,Phytochemicals,BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03644558754957555
+183,C0026882,Mutation,GENF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03602751605695657
+184,C0022984,Laminin,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03598250846238851
+185,C0004364,Autoimmune Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.035620049650948706
+186,C0009429,Combined Modality Therapy,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03545678467922181
+187,C0007587,Cell Death,CELF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03509705512449209
+188,C0719453,NAME_NOT_FOUND,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.034709214741228483
+189,C1261469,NAME_NOT_FOUND,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03430424457922412
+190,C0728940,Excision,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.034072068143260546
+191,C0155626,Acute myocardial infarction,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.033898342628958106
+192,C0935989,imatinib,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03389455119429267
+193,C0023796,Lipolysis,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.033600221782363715
+194,C1268567,Protein-tyrosine kinase inhibitor,PHSU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03350509212669121
+195,C0020676,Hypothyroidism,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.033312688105447366
+196,C0086982,Signal Transduction Pathways,CELF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03315230679373403
+197,C0301872,Immune response,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.033133419937291964
+198,C0133860,"fatty acids, omega-6",BACS,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.033067641576646684
+199,C1511790,Detection,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03270248096157849
+200,C0001175,Acquired Immunodeficiency Syndrome,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03257419169505743
+201,C0024141,"Lupus Erythematosus, Systemic",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03237760640141254
+202,C0041296,Tuberculosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.032066050367256356
+203,C0278790,NAME_NOT_FOUND,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.031887693053284885
+204,C0724624,medium chain triglycerides,LIPD,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.03142486897557452
+205,C1326961,glucose homeostasis,PHSF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.031405495992613684
+206,C0009324,Ulcerative Colitis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.030049075600298104
+207,C0020550,Hyperthyroidism,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.029785421308350445
+208,C0035139,Surgical Replantation,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.029775926614945582
+209,C0042870,Vitamin D Deficiency,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.029705000240275937
+210,C0547070,Ablation,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.02942817503620712
+211,C0123091,quetiapine,ORCH,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.029382360111789654
+212,C0005615,Birth,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.029171863040669935
+213,C0031090,Periodontal Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0288285045472466
+214,C0034833|5241,"Receptors, Progesterone",AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.028747544186710872
+215,C0149931,Migraine Disorders,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0286635398902123
+216,C0040300,Body tissue,TISU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.028646839206203718
+217,C0740394,Hyperuricemia,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.028517087813649894
+218,C0081937,Dipeptidyl-Peptidase IV,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.028220188502523294
+219,C0002736,Amyotrophic Lateral Sclerosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.027927403637065258
+220,C0264716,Chronic heart failure,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.027860782729714755
+221,C0341439,Chronic liver disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.026335678439573275
+222,C0034618,NAME_NOT_FOUND,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.026114425886774473
+223,C0252527,Galectin 1,AAPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.026025462444953823
+224,C0018787,Heart,BPOC,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.024875655653067336
+225,C0079487,Helicobacter Infections,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.02420915033608259
+226,C0026848,Myopathy,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.024149690469686312
+227,C0341697,NAME_NOT_FOUND,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.023946695588092762
+228,C0014130,Endocrine System Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0235285440130871
+229,C0597257,pleiotropism,GENF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.023330374317593418
+230,C0041948,Uremia,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.023325356041989445
+231,C0025266,Male population group,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.021771571245656072
+232,C0043210,Woman,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.02150933410280443
+233,C0034011,Puberty,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.021451369898831084
+234,C0235950,Zinc deficiency,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.021313211365788207
+235,C1523924,NAME_NOT_FOUND,CELF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.02112170571711325
+236,C0394664,Acupuncture procedure,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.02055213049093271
+237,C0035435,Rheumatism,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01995041021402004
+238,C0001792,Elderly (population group),HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019881703077802147
+239,C0017296,gene therapy,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019616620203685296
+240,C0085584,Encephalopathies,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019606817971513972
+241,C0008059,Child,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019551678767990615
+242,C0018213,Graves Disease,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019471049489335087
+243,C0026591,Mother (person),HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.019072868771318
+244,C0001675,Adult,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01902908082141816
+245,C0086287,Females,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018923470312965755
+246,C0001206,Acromegaly,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018889705776501273
+247,C0678236,Rare Diseases,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01885513729919516
+248,C0154251,Lipid Metabolism Disorders,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018701810935170468
+249,C0009932,Control Groups,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01861124515560233
+250,C0086582,Males,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018486187931262235
+251,C0680063,Offspring,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01817782025178725
+252,C0023787,Lipodystrophy,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01815264364897303
+253,C0027061,Myocardium,TISU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018149643108578722
+254,C0020619,Hypogonadism,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.018127954042869206
+255,C0524909,"Hepatitis B, Chronic",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.017106425898040265
+256,C0021270,Infant,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01700925594915655
+257,C0047506,3-iodobenzylguanidine,IRDA,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016891397090046726
+258,C0007457,Caucasoid Race,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016746853787927857
+259,C0205653,Adolescent (age group),HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016723022779184613
+260,C0021289,"Infant, Newborn",HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016680673813495302
+261,C0015031,Ethnic group,POPG,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016600624356878993
+262,C0015576,Family,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01643127515388261
+263,C0085756,African American,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016409395422738615
+264,C0033011,Pregnant Women,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016196022837431105
+265,C0011880,Diabetic Ketoacidosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016100105507001222
+266,C0005779,Blood Coagulation Disorders,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.016093889465671585
+267,C0221002,"Hyperparathyroidism, Primary",DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0159448413578192
+268,C0206194,Survivors,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01569012440796632
+269,C1527336,Sjogren's Syndrome,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.015505995179048564
+270,C0042960,Voluntary Workers,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.015411414547278825
+271,C0030551,parent,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.015131658493664168
+272,C0002915,General Anesthesia,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014665084059884044
+273,C0034693,Rattus norvegicus,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014539077195384636
+274,C1527116,Workers,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014402073479150795
+275,C0238703,Athletes,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014399646579524507
+276,C0376387,Transplant Recipients,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014235254025294596
+277,C0079595,Imaging Techniques,TOPP,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.014200400339577429
+278,C0599779,Animal Model,ANIM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013963527055335523
+279,C0440744,Human tissue,TISU,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013843024494503173
+280,C0439824,Verbal,ORGF,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013752015369670164
+281,C0238598,Young Adult,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013592881450309778
+282,C1516213,Cancer Patient,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013589935864915262
+283,C0026809,Mus,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01355944629240826
+284,C0205847,Middle Aged,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013421506224969649
+285,C0870604,Female child,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.013156544217065472
+286,C0018995,Hemochromatosis,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01294269263174289
+287,C0078988,Asians,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012901086425574509
+288,C0012984,Canis familiaris,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012636128869315047
+289,C0005680,Black race,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0125745185397101
+290,C0870221,Boys,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012533585287018284
+291,C0087178,Youth,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012457093554872567
+292,C0041408,Turner Syndrome,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012301139987578272
+293,C0037047,Sibling,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012193888083512489
+294,C0043157,Caucasians,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.012096678070325679
+295,C0034493,NAME_NOT_FOUND,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.011524691210976852
+296,C0038492,student,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.011524200032350648
+297,C0302820,Carbohydrate Metabolism,MOFT,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.011507342125894998
+298,C0337903,NAME_NOT_FOUND,POPG,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010937370329661347
+299,C0007450,Felis catus,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010580701710831879
+300,C0026192,Minority Groups,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010519313829676007
+301,C1148564,antioxidant activity,MOFT,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010443176670947508
+302,C0034705,"Rats, Inbred SHR",MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010364883140367568
+303,C0080103,Relative (related person),HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010227559643657147
+304,C0422792,NAME_NOT_FOUND,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.010178513235943988
+305,C0025936,"Mice, Transgenic",MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.01002964615086396
+306,C0035804,Rodent,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009851533696993063
+307,C0018724,Health Personnel,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.00974983495351775
+308,C0871463,surgical patients,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009626665091490873
+309,C0870668,hospitalized patients,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009556261982101452
+310,C0027126,Myotonic Dystrophy,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009383417565422407
+311,C0019944,Equus caballus,MAMM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009193589161058604
+312,169792,NAME_NOT_FOUND,GNGM,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.009143081820423348
+313,C0599987,Employee,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.008897325808798411
+314,C0870646,High Risk Populations,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.008418355638771004
+315,C0022735,Klinefelter Syndrome,DSYN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.008256096222938557
+316,C0001588,"Adolescents, Female",HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.008160913566879093
+317,C0162409,spouse,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.007398454990412127
+318,C1518563,Older Population,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.007195843861822117
+319,C0242444,Population at Risk,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.006840298552438035
+320,C0870602,geriatric patients,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.006709027002029739
+321,C0206193,Long-Term Survivors,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0060179214836190015
+322,C0748064,Psychiatric inpatient,HUMN,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.005822417443390394
+323,C0008972,Clinical Research,RESA,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.003634545283894843
+324,C0325628,Meleagris gallopavo,BIRD,C0011860,"Diabetes Mellitus, Non-Insulin-Dependent",0.0024480977490631104
